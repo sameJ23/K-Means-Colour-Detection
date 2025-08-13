@@ -22,41 +22,45 @@ function setup() {
   pixelDensity(1);
   noStroke();
 
-  // Create a canvas that fits the current image (will be resized when users load new images)
-  createCanvas(img ? img.width + 200 : 800, img ? img.height : 600);
+  // Create a container for UI
+  const ui = createDiv();
+  ui.id('controls');
+  ui.style('padding', '10px');
+  ui.style('background', '#f0f0f0');
+  ui.style('display', 'flex');
+  ui.style('gap', '10px');
+  ui.style('flex-wrap', 'wrap');
+  ui.parent(document.body); // attach to body
 
-  // === NEW: build minimal UI (no palette changes) ===
-  // k (clusters)
+  // Create sliders inside that container
   kSlider = createSlider(2, 12, k, 1);
-  kSlider.position(10, 10);
+  kSlider.parent(ui);
   kSlider.input(() => { k = kSlider.value(); recompute(); });
 
-  // iterations
   iterSlider = createSlider(1, 1000, ITER, 1);
-  iterSlider.position(10, 40);
+  iterSlider.parent(ui);
   iterSlider.input(() => { ITER = iterSlider.value(); recompute(); });
 
-  // sampling step (quality / speed tradeoff)
   stepSlider = createSlider(1, 20, STEP, 1);
-  stepSlider.position(10, 70);
+  stepSlider.parent(ui);
   stepSlider.input(() => { STEP = stepSlider.value(); recompute(); });
 
-  // Single image upload (uses p5's file input)
+  // File inputs inside same UI bar
   fileInput = createFileInput(handleFileUpload);
-  fileInput.position(10, 100);
+  fileInput.parent(ui);
 
-  // Folder upload (Chrome/Edge/Opera). Firefox has partial support.
   folderInput = createElement('input');
   folderInput.attribute('type', 'file');
   folderInput.attribute('multiple', '');
-  folderInput.attribute('webkitdirectory', ''); // key for folders
-  folderInput.position(10, 130);
+  folderInput.attribute('webkitdirectory', '');
+  folderInput.parent(ui);
   folderInput.changed(handleFolderUpload);
 
-  // FIRST RUN using your exact pipeline
-  recompute();
+  // Create the canvas *after* the controls so it goes below
+  createCanvas(img ? img.width + 200 : 800, img ? img.height : 600);
 
-  noLoop(); // we’ll call redraw() manually after recompute
+  recompute();
+  noLoop();
 }
 
 function draw() {
