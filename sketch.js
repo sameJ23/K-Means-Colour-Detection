@@ -18,49 +18,73 @@ function preload(){
   img = loadImage('Zeri_0.jpg'); // keep or remove; uploads will replace img
 }
 
+// put these near your globals
+let html = { k: null, iter: null, step: null, file: null, folder: null };
+
 function setup() {
   pixelDensity(1);
   noStroke();
 
-  // Create a container for UI
-  const ui = createDiv();
-  ui.id('controls');
-  ui.style('padding', '10px');
-  ui.style('background', '#f0f0f0');
-  ui.style('display', 'flex');
-  ui.style('gap', '10px');
-  ui.style('flex-wrap', 'wrap');
-  ui.parent(document.body); // attach to body
+  // find the HTML controls that are already on the page
+  bindControls();
 
-  // Create sliders inside that container
-  kSlider = createSlider(2, 12, k, 1);
-  kSlider.parent(ui);
-  kSlider.input(() => { k = kSlider.value(); recompute(); });
-
-  iterSlider = createSlider(1, 1000, ITER, 1);
-  iterSlider.parent(ui);
-  iterSlider.input(() => { ITER = iterSlider.value(); recompute(); });
-
-  stepSlider = createSlider(1, 20, STEP, 1);
-  stepSlider.parent(ui);
-  stepSlider.input(() => { STEP = stepSlider.value(); recompute(); });
-
-  // File inputs inside same UI bar
-  fileInput = createFileInput(handleFileUpload);
-  fileInput.parent(ui);
-
-  folderInput = createElement('input');
-  folderInput.attribute('type', 'file');
-  folderInput.attribute('multiple', '');
-  folderInput.attribute('webkitdirectory', '');
-  folderInput.parent(ui);
-  folderInput.changed(handleFolderUpload);
-
-  // Create the canvas *after* the controls so it goes below
+  // canvas goes *below* the controls because the controls are in HTML flow
   createCanvas(img ? img.width + 200 : 800, img ? img.height : 600);
 
   recompute();
   noLoop();
+}
+
+function bindControls(){
+  html.k     = document.getElementById('k');
+  html.iter  = document.getElementById('iter');
+  html.step  = document.getElementById('step');
+  html.file  = document.getElementById('imgFile');
+  html.folder= document.getElementById('folderInput');
+
+  if (html.k) {
+    html.k.value = k;
+    html.k.addEventListener('input', () => { k = +html.k.value; recompute(); });
+  }
+  if (html.iter) {
+    html.iter.value = ITER;
+    html.iter.addEventListener('input', () => { ITER = +html.iter.value; recompute(); });
+  }
+  if (html.step) {
+    html.step.value = STEP;
+    html.step.addEventListener('input', () => { STEP = +html.step.value; recompute(); });
+  }
+  if (html.file) {
+    html.file.addEventListener('change', () => {
+      const f = html.file.files?.[0];
+      if (!f) return;
+      const url = URL.createObjectURL(f);
+      loadImage(url, (loaded) => { img = loaded; URL.revokeObjectURL(url); resizeIfNeeded(); recompute(); });
+    });
+  }
+  if (html.folder) {
+    html.folder.addEventListener('change', () => {
+      const files = [...html.folder.files].filter(f => f.type.startsWith('image/'));
+      if (!files.length) return;
+      const url = URL.createObjectURL(files[0]);
+      loadImage(url, (loaded) => { img = loaded; URL.revokeObjectURL(url); resizeIfNeeded(); recompute(); });
+    });
+  }
+}
+
+function recompute(){
+  if (!img) return;
+  sampleArray.length = 0;
+  sample(img, STEP);            // your sampler
+  centroids = kmeans(ITER, k);  // your k-means
+  resizeIfNeeded();
+  redraw();
+}
+
+function resizeIfNeeded(){
+  if (!img) return;
+  const W = img.width + 200, H = img.height;
+  if (width !== W || height !== H) resizeCanvas(W, H);
 }
 
 function draw() {
