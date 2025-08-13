@@ -20,8 +20,11 @@ function setup() {
   pixelDensity(1);
   noStroke();
 
-  // --- Controls bar (p5 elements; NOT absolutely positioned) ---
-  const ui = createDiv().id('controls');
+  ensureLayout(); // inject CSS & ensure #controls and #canvasWrap exist
+
+  // --- Controls bar (p5 elements) mounted into #controls ---
+  const controlsHost = select('#controls'); // p5 select
+  const ui = createDiv().id('controlsBar').parent(controlsHost);
   ui.style('background', '#f0f0f0');
   ui.style('padding', '10px');
   ui.style('display', 'flex');
@@ -29,7 +32,7 @@ function setup() {
   ui.style('flexWrap', 'wrap');
   ui.style('alignItems', 'center');
 
-  // Labels + sliders
+  // Labels + sliders (NO absolute positioning)
   createSpan('Clusters (k): ').parent(ui);
   kSlider = createSlider(2, 12, k, 1).parent(ui)
     .input(() => { k = kSlider.value(); recompute(); });
@@ -54,13 +57,14 @@ function setup() {
     .parent(ui)
     .changed(handleFolderUpload);
 
-  // --- Canvas created AFTER the bar so it flows underneath ---
+  // --- Canvas created & mounted under the controls ---
   const w = img ? img.width + 200 : 800;
   const h = img ? img.height : 600;
-  createCanvas(w, h);
+  const cnv = createCanvas(w, h);
+  cnv.parent('canvasWrap');
 
   recompute();
-  noLoop(); // we redraw on demand
+  noLoop(); // redraw on demand
 }
 
 function draw() {
@@ -111,6 +115,33 @@ function resizeIfNeeded() {
   }
 }
 
+// === Layout helper: inject CSS & ensure containers exist ===
+function ensureLayout() {
+  // Inject minimal CSS to force stacking & avoid overlap
+  const css = `
+    #controls { position: relative; z-index: 1; }
+    #canvasWrap { position: relative; }
+    canvas { display: block; max-width: 100%; height: auto; }
+    /* In case any previous CSS tried to pin form controls */
+    #controls input, #controls span { position: static !important; }
+  `;
+  const style = document.createElement('style');
+  style.textContent = css;
+  document.head.appendChild(style);
+
+  // Ensure the containers exist
+  if (!document.getElementById('controls')) {
+    const c = document.createElement('div');
+    c.id = 'controls';
+    document.body.prepend(c);
+  }
+  if (!document.getElementById('canvasWrap')) {
+    const w = document.createElement('div');
+    w.id = 'canvasWrap';
+    document.body.appendChild(w);
+  }
+}
+
 /* =========================
    EVERYTHING BELOW IS YOURS
    (unchanged from your code)
@@ -154,10 +185,11 @@ function kmeans(iter, k, img) {
     const sums = Array.from({ length: k }, () => [0, 0, 0]);
     const counts = new Array(k).fill(0);
     for (let i = 0; i < sampleArray.length; i++){
-      sums[closest[i]][0] += sampleArray[i][0]
-      sums[closest[i]][1] += sampleArray[i][1]
-      sums[closest[i]][2] += sampleArray[i][2]
-      counts[closest[i]]++;
+      const cid = closest[i];
+      sums[cid][0] += sampleArray[i][0];
+      sums[cid][1] += sampleArray[i][1];
+      sums[cid][2] += sampleArray[i][2];
+      counts[cid]++;
     }
     for (let j = 0; j < k; j++) {
       if (counts[j] > 0) {
