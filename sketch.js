@@ -1,7 +1,7 @@
 
 let k = 5;
 let STEP = 5;
-let ITER = 100;
+let ITER = 200;
 let img;
 let sampleArray = [];
 let centroids = [];
