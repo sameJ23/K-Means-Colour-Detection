@@ -13,7 +13,7 @@ let fileInput;            // single-file upload
 let folderInput;          // folder upload (webkitdirectory)
 
 function preload(){
-  img = loadImage('Zeri_0.jpg'); // default; uploads will replace
+  //img = loadImage('Zeri_0.jpg'); // default; uploads will replace
 }
 
 function setup() {
