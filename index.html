@@ -1,15 +1,204 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.8/lib/p5.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.11.8/lib/addons/p5.sound.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <meta charset="utf-8">
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>K-Means Palette – Demo</title>
+  <style>
+    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial}
+    .toolbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;
+      padding:10px 12px;border-bottom:1px solid #e5e7eb;background:#f9fafb}
+    .control{display:flex;align-items:center;gap:8px}
+    .thumbs{display:flex;gap:8px; padding:10px; overflow:auto; border-top:1px solid #eee}
+    .thumbs img{height:60px;aspect-ratio:1/1;object-fit:cover;border:1px solid #ddd;border-radius:6px;cursor:pointer}
+    #canvasWrap{display:flex;justify-content:center;padding:12px}
+    label{font-size:14px;color:#111827}
+    input[type="range"]{width:160px}
+    .grow{flex:1}
+    button{padding:8px 10px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer}
+    button:hover{background:#f3f4f6}
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="control">
+      <label for="imgFile">Image:</label>
+      <input id="imgFile" type="file" accept="image/*">
+    </div>
 
-  </head>
-  <body>
-    <main>
-    </main>
-    <script src="sketch.js"></script>
-  
+    <div class="control">
+      <label for="folderInput">Folder of images:</label>
+      <!-- NOTE: webkitdirectory works in Chromium/Edge/Opera; Safari needs user gesture; Firefox partial -->
+      <input id="folderInput" type="file" webkitdirectory multiple>
+    </div>
 
-</body></html>
+    <div class="control">
+      <label for="k">Clusters (k): <span id="kVal">5</span></label>
+      <input id="k" type="range" min="2" max="12" step="1" value="5">
+    </div>
+
+    <div class="control">
+      <label for="iter">Iterations: <span id="iterVal">10</span></label>
+      <input id="iter" type="range" min="1" max="50" step="1" value="10">
+    </div>
+
+    <div class="grow"></div>
+    <button id="recompute">Recompute</button>
+  </div>
+
+  <div id="canvasWrap"></div>
+  <div class="thumbs" id="thumbs"></div>
+
+  <!-- p5 -->
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
+  <script>
+    // --- state ---
+    let currentImg = null;        // p5.Image currently selected
+    let objectURLs = [];          // to revoke() after use
+    let imagesInFolder = [];      // {file, url} list for thumbnails
+
+    // --- UI elements ---
+    const kSlider = document.getElementById('k');
+    const kVal    = document.getElementById('kVal');
+    const itSlider= document.getElementById('iter');
+    const itVal   = document.getElementById('iterVal');
+    const imgFile = document.getElementById('imgFile');
+    const folder  = document.getElementById('folderInput');
+    const thumbs  = document.getElementById('thumbs');
+    const recomputeBtn = document.getElementById('recompute');
+
+    kSlider.addEventListener('input', () => { kVal.textContent = kSlider.value; scheduleRecompute(); });
+    itSlider.addEventListener('input', () => { itVal.textContent = itSlider.value; scheduleRecompute(); });
+
+    imgFile.addEventListener('change', () => {
+      if (imgFile.files && imgFile.files[0]) {
+        loadFromFile(imgFile.files[0]);
+      }
+    });
+
+    folder.addEventListener('change', () => {
+      imagesInFolder = [];
+      thumbs.innerHTML = '';
+      cleanupURLs();
+      // filter images
+      const files = Array.from(folder.files)
+        .filter(f => f.type.startsWith('image/'))
+        .sort((a,b)=> a.name.localeCompare(b.name));
+
+      files.forEach((file, idx) => {
+        const url = URL.createObjectURL(file);
+        objectURLs.push(url);
+        imagesInFolder.push({ file, url });
+
+        // build a clickable thumbnail
+        const img = new Image();
+        img.src = url;
+        img.title = file.name;
+        img.addEventListener('click', () => loadFromFile(file));
+        thumbs.appendChild(img);
+      });
+
+      // auto-load the first image if present
+      if (files[0]) loadFromFile(files[0]);
+    });
+
+    recomputeBtn.addEventListener('click', () => doRecompute());
+
+    function cleanupURLs() {
+      objectURLs.forEach(u => URL.revokeObjectURL(u));
+      objectURLs = [];
+    }
+
+    function loadFromFile(file) {
+      // create blob URL & load via p5.loadImage
+      const url = URL.createObjectURL(file);
+      objectURLs.push(url);
+      loadImage(url, img => {
+        currentImg = img;
+        resizeCanvasToImage(img);
+        image(img, 0, 0); // show original; your draw() can do more
+        doRecompute();
+      }, err => console.error('loadImage failed', err));
+    }
+
+    // --- p5 sketch scaffold ---
+    let cnv;
+    function setup() {
+      cnv = createCanvas(640, 480);
+      cnv.parent('canvasWrap');
+      noLoop(); // we redraw on demand
+      background(240);
+      text('Upload an image or a folder ⬆', 12, 24);
+    }
+
+    function resizeCanvasToImage(img) {
+      // fit large images but keep aspect ratio
+      const maxW = Math.min(window.innerWidth - 40, 1000);
+      const maxH = 600;
+      let w = img.width, h = img.height;
+      const r = Math.min(maxW / w, maxH / h, 1);
+      resizeCanvas(Math.round(w * r), Math.round(h * r));
+    }
+
+    // debounce recomputation during slider drags
+    let recomputeTimer = null;
+    function scheduleRecompute() {
+      if (!currentImg) return;
+      clearTimeout(recomputeTimer);
+      recomputeTimer = setTimeout(doRecompute, 150);
+    }
+
+    function doRecompute() {
+      if (!currentImg) return;
+      const k = parseInt(kSlider.value, 10);
+      const it = parseInt(itSlider.value, 10);
+
+      // Example pipeline:
+      // 1) sample pixels from currentImg
+      // 2) run your k-means
+      // 3) draw results (swatches/gradients/overlays)
+      const sampled = samplePixels(currentImg, 5); // step=5 as example
+      const { centroids } = runKMeans(sampled, k, it); // <-- plug in YOUR implementation
+      drawSwatches(centroids);
+    }
+
+    // --- utility: sample pixels every N (returns array of [r,g,b]) ---
+    function samplePixels(img, step=5) {
+      img.loadPixels();
+      const out = [];
+      const w = img.width, h = img.height, p = img.pixels;
+      for (let y = 0; y < h; y += step) {
+        for (let x = 0; x < w; x += step) {
+          const i = (y * w + x) * 4;
+          out.push([p[i], p[i+1], p[i+2]]);
+        }
+      }
+      return out;
+    }
+
+    // --- placeholder: wire this to YOUR actual k-means ---
+    function runKMeans(samples, k, iter) {
+      // Replace this with your real function.
+      // Return shape: { centroids: [[r,g,b], ... length k] }
+      // This stub just picks k random samples:
+      const c = [];
+      for (let i = 0; i < k; i++) c.push(samples[Math.floor(Math.random()*samples.length)]);
+      return { centroids: c };
+    }
+
+    // --- render color swatches at bottom of canvas ---
+    function drawSwatches(cols) {
+      // redraw the current image as background (optional)
+      if (currentImg) image(currentImg, 0, 0, width, height);
+      const sw = Math.floor(width / cols.length);
+      const sh = 30;
+      for (let i = 0; i < cols.length; i++) {
+        const [r,g,b] = cols[i];
+        noStroke();
+        fill(r,g,b);
+        rect(i*sw, height - sh, sw, sh);
+      }
+    }
+  </script>
+</body>
+</html>
