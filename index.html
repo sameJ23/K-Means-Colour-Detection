@@ -2,57 +2,36 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>K-Means Palette — James Novosel</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>K-Means Palette — James</title>
+
+  <!-- Minimal styling: same vibe as your portfolio, nothing excessive -->
   <style>
     :root{
       --bg:#0f172a;        /* slate-900 */
       --panel:#111827;     /* gray-900 */
       --text:#e5e7eb;      /* gray-200 */
       --muted:#94a3b8;     /* slate-400 */
-      --accent:#60a5fa;    /* blue-400 (edit me to rebrand) */
+      --accent:#60a5fa;    /* EDIT ME if you want a different highlight */
       --card:#0b1220;      /* darker panel */
+      --border:rgba(148,163,184,.12);
       --ring: color-mix(in srgb, var(--accent) 40%, transparent);
-      --border: rgba(148,163,184,.12);
     }
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica Neue,Arial,"Apple Color Emoji","Segoe UI Emoji";
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica Neue,Arial;
       background:
         radial-gradient(1200px 600px at 10% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
         radial-gradient(900px 500px at 90% 10%, rgba(16,185,129,.08), transparent 60%),
         var(--bg);
       color:var(--text);
+      padding:28px 16px 48px;
     }
-    .wrap{max-width:1100px;margin:0 auto;padding:48px 20px 72px}
-    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}
-    .brand{display:flex;align-items:center;gap:14px}
-    .avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#34d399);box-shadow:0 0 0 3px var(--ring)}
-    h1{font-size:clamp(22px,3vw,28px);margin:0}
-    .sub{color:var(--muted);margin:6px 0 0;font-size:14px}
-    nav a{color:var(--muted);text-decoration:none;margin-left:16px;font-size:14px}
-    nav a:hover{color:var(--text)}
-
-    .hero{
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:22px;
-      margin-bottom:22px;
-    }
-    .hero h2{margin:0;font-size:clamp(22px,4vw,32px)}
-    .hero p{margin:6px 0 0;color:var(--muted)}
-
-    /* Layout: canvas + controls panel */
-    .stage{
-      display:grid;gap:18px;
-      grid-template-columns:1fr;
-    }
-    @media (min-width: 900px){
-      .stage{grid-template-columns: 2fr 1fr;}
-    }
+    .wrap{max-width:1100px;margin:0 auto}
+    .grid{display:grid;gap:18px;grid-template-columns:1fr}
+    @media (min-width:900px){ .grid{grid-template-columns:2fr 1fr} }
 
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0)),var(--card);
@@ -61,103 +40,54 @@
       padding:16px;
     }
 
-    /* Canvas area */
+    /* Canvas host */
     #canvasWrap{
-      display:grid;place-items:center;
+      display:grid;place-items:center;min-height:360px;
       background:#0a0f1c;border:1px solid rgba(148,163,184,.14);
-      border-radius:12px;min-height:360px;overflow:hidden;
+      border-radius:12px;overflow:hidden;
     }
-    /* the actual p5 canvas gets a subtle border radius */
-    canvas.p5Canvas{border-radius:12px}
+    canvas.p5Canvas{border-radius:12px;display:block;max-width:100%;height:auto}
 
     /* Controls panel */
-    #controls{
-      display:flex;flex-direction:column;gap:12px;
-    }
+    #controls{display:flex;flex-direction:column;gap:12px}
     .control{
-      display:flex;align-items:center;gap:10px;
+      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
       background:#0d1424;border:1px solid rgba(148,163,184,.16);
       border-radius:12px;padding:12px;
     }
     .control label{min-width:120px;color:var(--muted);font-size:13px}
-    .row{display:flex;gap:12px;flex-wrap:wrap}
 
     /* Inputs themed to accent */
     input[type="range"]{
-      width:220px;appearance:none;height:4px;border-radius:999px;
+      width:220px;appearance:none;height:4px;border-radius:999px;outline:none;
       background: color-mix(in srgb, var(--accent) 25%, rgba(148,163,184,.25));
-      outline:none;
     }
     input[type="range"]::-webkit-slider-thumb{
       -webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;
-      background:var(--accent);border:2px solid #000;box-shadow:0 0 0 3px var(--ring);
-      cursor:pointer;
+      background:var(--accent);border:2px solid #000;box-shadow:0 0 0 3px var(--ring);cursor:pointer;
     }
     input[type="file"], input[type="number"], select, button{
       background:#0d1424;border:1px solid rgba(148,163,184,.25);color:var(--text);
       padding:8px 10px;border-radius:10px;font-size:14px;
     }
-    button.primary{
-      background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 20%, transparent), rgba(52,211,153,.15));
-      border-color: color-mix(in srgb, var(--accent) 35%, transparent);
-      font-weight:600;
-    }
     button:hover{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring);cursor:pointer}
-
-    footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="avatar" aria-hidden="true"></div>
-        <div>
-          <h1>James Novosel</h1>
-          <p class="sub">K-Means Palette visualiser • part of my portfolio</p>
-        </div>
-      </div>
-      <nav>
-        <a href="./" rel="noreferrer">Back to portfolio</a>
-        <a href="https://github.com/sameJ23/K-Means-Colour-Detection" target="_blank" rel="noreferrer">Source</a>
-      </nav>
-    </header>
-
-    <section class="hero">
-      <h2>Image K-Means Palette</h2>
-      <p>Upload an image, pick k, and extract dominant colours. Live p5.js canvas on the left, controls on the right.</p>
-    </section>
-
-    <section class="stage">
-      <!-- Canvas card -->
+    <div class="grid">
       <div class="card">
         <div id="canvasWrap"></div>
       </div>
-
-      <!-- Controls card -->
       <div class="card">
-        <div id="controls">
-          <!-- Your p5-created inputs will be parented here from sketch.js -->
-          <!-- If you also want static helpers, add them as .control rows: -->
-          <!--
-          <div class="control">
-            <label for="k">Clusters (k)</label>
-            <input id="k" type="range" min="2" max="12" value="5">
-          </div>
-          -->
-        </div>
+        <div id="controls"><!-- p5 will populate rows here --></div>
       </div>
-    </section>
-
-    <footer>© <span id="y"></span> James Novosel — Sydney, Australia</footer>
+    </div>
   </div>
 
-  <!-- p5 only once -->
+  <!-- Only include p5 once -->
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
-  <!-- your sketch; cache-bust with v= so you don’t fight the browser -->
-  <script src="sketch.js?v=5"></script>
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
+  <!-- Your sketch (cache-bust so changes show up) -->
+  <script src="sketch.js?v=6"></script>
 </body>
 </html>
