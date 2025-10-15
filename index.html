@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>K-Means Palette — James</title>
 
-  <!-- Minimal styling: same vibe as your portfolio, nothing excessive -->
+  
   <style>
     :root{
-      --bg:#0f172a;        /* slate-900 */
-      --panel:#111827;     /* gray-900 */
-      --text:#e5e7eb;      /* gray-200 */
-      --muted:#94a3b8;     /* slate-400 */
-      --accent:#60a5fa;    /* EDIT ME to rebrand highlight */
-      --card:#0b1220;      /* darker panel */
+      --bg:#0f172a;        
+      --panel:#111827;    
+      --text:#e5e7eb;      
+      --muted:#94a3b8;     
+      --accent:#60a5fa;    
+      --card:#0b1220;     
       --border:rgba(148,163,184,.12);
       --ring: color-mix(in srgb, var(--accent) 40%, transparent);
     }
@@ -48,16 +48,16 @@
       padding:16px;
     }
 
-    /* Canvas host */
+    
     #canvasWrap{
       display:grid;place-items:center;
       background:#0a0f1c;border:1px solid rgba(148,163,184,.14);
       border-radius:12px;overflow:hidden;
-      /* remove big min-height to avoid blank abyss */
+      
     }
     canvas.p5Canvas{border-radius:12px;display:block;max-width:100%;height:auto}
 
-    /* Controls panel */
+    
     #controls{display:flex;flex-direction:column;gap:12px}
     .control{
       display:flex;align-items:center;gap:10px;flex-wrap:wrap;
@@ -66,7 +66,7 @@
     }
     .control label{min-width:120px;color:var(--muted);font-size:13px}
 
-    /* Inputs themed to accent */
+    
     input[type="range"]{
       width:220px;appearance:none;height:4px;border-radius:999px;outline:none;
       background: color-mix(in srgb, var(--accent) 25%, rgba(148,163,184,.25));
@@ -81,14 +81,14 @@
     }
     button:hover{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring);cursor:pointer}
 
-    /* Nuke surprise light backgrounds from any p5 DOM defaults */
+    
     #controls, #controls * { background-color: transparent; }
     input[type="file"]::-webkit-file-upload-button{
       background:#0d1424;color:var(--text);border:1px solid rgba(148,163,184,.25)
     }
     #controls input:focus, #controls select:focus, #controls button:focus{
       outline:none; box-shadow:0 0 0 3px var(--ring); border-color:var(--accent)
-    }/* === Slider fill styling === */
+    }
     input[type="range"] {
       width: 220px;
       height: 4px;
@@ -98,7 +98,7 @@
       background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--value, 0%), rgba(148,163,184,.25) var(--value, 0%), rgba(148,163,184,.25) 100%);
     }
     
-    /* make the thumb match your accent */
+    
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
@@ -134,17 +134,17 @@
         <div id="canvasWrap"></div>
       </div>
       <div class="card">
-        <div id="controls"><!-- p5 will populate rows here --></div>
+        <div id="controls">></div>
       </div>
     </div>
   </div>
 
-  <!-- Only include p5 once -->
+ 
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
 
-  <!-- Your entire sketch inlined so it's truly one file -->
+  
   <script>
-    // ======= YOUR GLOBALS (kept) =======
+    
     let k = 5;
     let STEP = 5;
     let ITER = 200;
@@ -153,10 +153,10 @@
     let centroids = [];
     let compliment = [];
 
-    // UI elements (p5-created)
+   
     let kSlider, iterSlider, stepSlider;
-    let fileInput;            // single-file upload
-    let folderInput;          // folder upload (webkitdirectory)
+    let fileInput;            
+    let folderInput;          
     let recomputeTimer;
 
     function setup() {
@@ -183,7 +183,7 @@
         elt.parent(wrap);
       };
 
-      // Sliders
+      
       kSlider = createSlider(2, 12, k, 1);
       kSlider.input(scheduleRecompute);
       row('Clusters (k)', kSlider);
@@ -204,7 +204,7 @@
       folderInput.changed(handleFolderUpload);
       row('Folder', folderInput);
 
-      noLoop(); // draw on demand
+      noLoop(); 
     }
 
     function windowResized(){
@@ -212,7 +212,7 @@
       redraw();
     }
 
-    // Debounce heavy recomputes while dragging sliders
+  
     function scheduleRecompute(){
       k = kSlider.value();
       ITER = iterSlider.value();
@@ -221,7 +221,7 @@
       recomputeTimer = setTimeout(recompute, 120);
     }
 
-    // Keep the canvas sized to the container, and scale to image after reserving palette space
+   
     function fitCanvasToHost(){
       const host = document.getElementById('canvasWrap');
       const totalW = host.clientWidth || 960;
@@ -293,10 +293,6 @@
         URL.revokeObjectURL(url);
       }, (err) => console.error('Folder image load failed:', err));
     }
-
-    /* =========================
-       YOUR ORIGINAL LOGIC BELOW
-       ========================= */
 
     function sample(img, step){
       img.loadPixels()
