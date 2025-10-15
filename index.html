@@ -17,6 +17,26 @@
       --border:rgba(148,163,184,.12);
       --ring: color-mix(in srgb, var(--accent) 40%, transparent);
     }
+    .wrap {
+      max-width: none;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .grid {
+      grid-template-columns: 3fr 1fr;
+    }
+    
+    #canvasWrap {
+      width: 100%;
+    }
+    
+    canvas.p5Canvas {
+      width: 100%;
+      height: auto;
+    }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
