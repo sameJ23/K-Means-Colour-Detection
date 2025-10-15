@@ -11,76 +11,111 @@ let compliment = [];
 let kSlider, iterSlider, stepSlider;
 let fileInput;            // single-file upload
 let folderInput;          // folder upload (webkitdirectory)
+let recomputeTimer;
 
 function preload(){
-  //img = loadImage('Zeri_0.jpg'); // default; uploads will replace
+  // img = loadImage('Zeri_0.jpg'); // optional default
 }
 
 function setup() {
   pixelDensity(1);
   noStroke();
 
-  ensureLayout(); // inject CSS & ensure #controls and #canvasWrap exist
+  const controlsHost = select('#controls');
+  const canvasHost = select('#canvasWrap');
 
-  // --- Controls bar (p5 elements) mounted into #controls ---
-  const controlsHost = select('#controls'); // p5 select
-  const ui = createDiv().id('controlsBar').parent(controlsHost);
-  ui.style('background', '#f0f0f0');
-  ui.style('padding', '10px');
-  ui.style('display', 'flex');
-  ui.style('gap', '10px');
-  ui.style('flexWrap', 'wrap');
-  ui.style('alignItems', 'center');
-
-  // Labels + sliders (NO absolute positioning)
-  createSpan('Clusters (k): ').parent(ui);
-  kSlider = createSlider(2, 12, k, 1).parent(ui)
-    .input(() => { k = kSlider.value(); recompute(); });
-
-  createSpan('Iterations: ').parent(ui);
-  iterSlider = createSlider(1, 1000, ITER, 1).parent(ui)
-    .input(() => { ITER = iterSlider.value(); recompute(); });
-
-  createSpan('Quality (STEP): ').parent(ui);
-  stepSlider = createSlider(1, 20, STEP, 1).parent(ui)
-    .input(() => { STEP = stepSlider.value(); recompute(); });
-
-  // File inputs inside same bar
-  createSpan(' Image: ').parent(ui);
-  fileInput = createFileInput(handleFileUpload).parent(ui);
-
-  createSpan(' Folder: ').parent(ui);
-  folderInput = createElement('input')
-    .attribute('type', 'file')
-    .attribute('multiple', '')
-    .attribute('webkitdirectory', '')
-    .parent(ui)
-    .changed(handleFolderUpload);
-
-  // --- Canvas created & mounted under the controls ---
-  const w = img ? img.width + 200 : 800;
-  const h = img ? img.height : 600;
+  // Canvas: fit to container width initially (16:9 until an image is loaded)
+  const w = canvasHost.elt.clientWidth || 960;
+  const h = Math.round(w * 9/16);
   const cnv = createCanvas(w, h);
   cnv.parent('canvasWrap');
+  cnv.addClass('p5Canvas');
 
-  recompute();
-  noLoop(); // redraw on demand
+  // Helper to make labeled rows that match the card UI
+  const row = (labelText, elt) => {
+    const wrap = createDiv().parent(controlsHost);
+    wrap.addClass('control');
+    const lab = createElement('label', labelText).parent(wrap);
+    lab.style('min-width','120px');
+    lab.style('color','var(--muted)');
+    elt.parent(wrap);
+  };
+
+  // Sliders
+  kSlider = createSlider(2, 12, k, 1);
+  kSlider.input(scheduleRecompute);
+  row('Clusters (k)', kSlider);
+
+  iterSlider = createSlider(1, 1000, ITER, 1);
+  iterSlider.input(scheduleRecompute);
+  row('Iterations', iterSlider);
+
+  stepSlider = createSlider(1, 20, STEP, 1);
+  stepSlider.input(scheduleRecompute);
+  row('Quality (STEP)', stepSlider);
+
+  // File inputs
+  fileInput = createFileInput(handleFileUpload);
+  row('Image', fileInput);
+
+  folderInput = createElement('input').attribute('type','file').attribute('multiple','').attribute('webkitdirectory','');
+  folderInput.changed(handleFolderUpload);
+  row('Folder', folderInput);
+
+  noLoop(); // draw on demand
 }
 
+function windowResized(){
+  fitCanvasToHost();
+  redraw();
+}
+
+// Debounce heavy recomputes while dragging sliders
+function scheduleRecompute(){
+  k = kSlider.value();
+  ITER = iterSlider.value();
+  STEP = stepSlider.value();
+  if (recomputeTimer) clearTimeout(recomputeTimer);
+  recomputeTimer = setTimeout(recompute, 120);
+}
+
+// Keep the canvas sized to the container, and scale to image if present
+function fitCanvasToHost(){
+  const host = document.getElementById('canvasWrap');
+  const maxW = host.clientWidth || 960;
+
+  if (!img){
+    resizeCanvas(maxW, Math.round(maxW * 9 / 16));
+    return;
+  }
+  const scale = maxW / img.width;
+  resizeCanvas(maxW, Math.round(img.height * scale));
+}
+
+// === Core flow ===
 function draw() {
   if (!img) return;
-  image(img, 0, 0);
-  // Your rendering exactly as-is:
-  showPalette(centroids, 10, 10, 40, 40);
+
+  // draw image scaled to current canvas width
+  const scale = width / img.width;
+  const imgH = Math.round(img.height * scale);
+  image(img, 0, 0, width, imgH);
+
+  // palette strip on the right
+  const stripW = Math.max(120, Math.round(width * 0.18));
+  const stripX = width - stripW;
+  const stripY = 0;
+  const stripH = imgH;
+
+  showPalette(centroids, stripX, stripY, stripW, stripH);
 }
 
-// === Single recompute that uses YOUR code exactly ===
 function recompute() {
   if (!img) return;
-  sampleArray.length = 0;     // clear previous samples
-  sample(img, STEP);          // YOUR sampler (unchanged)
-  centroids = kmeans(ITER, k);// YOUR k-means (unchanged)
-  resizeIfNeeded();           // keep canvas aligned to image
+  sampleArray.length = 0;
+  sample(img, STEP);             // YOUR sampler
+  centroids = kmeans(ITER, k);   // YOUR k-means
+  fitCanvasToHost();
   redraw();
 }
 
@@ -105,46 +140,9 @@ function handleFolderUpload() {
   }, (err) => console.error('Folder image load failed:', err));
 }
 
-// === Keep canvas sized to current image so your layout stays identical ===
-function resizeIfNeeded() {
-  if (!img) return;
-  const targetW = img.width + 200;
-  const targetH = img.height;
-  if (width !== targetW || height !== targetH) {
-    resizeCanvas(targetW, targetH);
-  }
-}
-
-// === Layout helper: inject CSS & ensure containers exist ===
-function ensureLayout() {
-  // Inject minimal CSS to force stacking & avoid overlap
-  const css = `
-    #controls { position: relative; z-index: 1; }
-    #canvasWrap { position: relative; }
-    canvas { display: block; max-width: 100%; height: auto; }
-    /* In case any previous CSS tried to pin form controls */
-    #controls input, #controls span { position: static !important; }
-  `;
-  const style = document.createElement('style');
-  style.textContent = css;
-  document.head.appendChild(style);
-
-  // Ensure the containers exist
-  if (!document.getElementById('controls')) {
-    const c = document.createElement('div');
-    c.id = 'controls';
-    document.body.prepend(c);
-  }
-  if (!document.getElementById('canvasWrap')) {
-    const w = document.createElement('div');
-    w.id = 'canvasWrap';
-    document.body.appendChild(w);
-  }
-}
-
 /* =========================
    EVERYTHING BELOW IS YOURS
-   (unchanged from your code)
+   (unchanged logic)
    ========================= */
 
 function sample(img, step){
@@ -222,20 +220,26 @@ function containsColour(list, colour) {
 }
 
 function showPalette(cols, x, y, w, h){
-  cols.sort((a, b) => luminanceRGB(b) - luminanceRGB(a));
+  if (!cols || !cols.length) return;
+  const sorted = [...cols].sort((a, b) => luminanceRGB(b) - luminanceRGB(a));
   noStroke();
-  for (let c = 0; c < cols.length - 1; c++){
+
+  // gradient bands
+  for (let c = 0; c < sorted.length - 1; c++){
     for (let p = 0; p < 1; p += 0.01){
-      let c1 = color(cols[c][0],cols[c][1],cols[c][2])
-      let c2 = color(cols[c+1][0],cols[c+1][1],cols[c+1][2])
-      let colour = lerpColor(c1,c2,p)
-      fill(colour);
-      rect(img.width+100,img.height/k*p + c*img.height/k,100,img.height/(k-1))
+      const c1 = color(sorted[c][0], sorted[c][1], sorted[c][2]);
+      const c2 = color(sorted[c+1][0], sorted[c+1][1], sorted[c+1][2]);
+      const mid = lerpColor(c1, c2, p);
+      fill(mid);
+      rect(x, y + (h/(sorted.length-1)) * (c + p), w, h/(sorted.length-1));
     }
   }
-  for (let i = 0; i < cols.length; i++){
-    fill(cols[i][0], cols[i][1], cols[i][2]);
-    rect(img.width,i*img.height/k, 100, img.height/k +2);
+
+  // solid swatches
+  const cellH = h / sorted.length;
+  for (let i = 0; i < sorted.length; i++){
+    fill(sorted[i][0], sorted[i][1], sorted[i][2]);
+    rect(x, y + i * cellH, w, cellH + 1);
   }
 }
 
