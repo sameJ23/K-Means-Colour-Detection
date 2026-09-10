@@ -28,8 +28,17 @@
 
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
-        Cantarell, Noto Sans, "Helvetica Neue", Arial;
+
+      font-family:
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Ubuntu,
+        Cantarell,
+        Noto Sans,
+        "Helvetica Neue",
+        Arial;
 
       background:
         radial-gradient(
@@ -57,29 +66,37 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       gap: 16px;
+
       margin-bottom: 28px;
     }
 
     header h1 {
       margin: 0;
+
       font-size: clamp(22px, 3vw, 28px);
     }
 
     header .sub {
       margin: 6px 0 0;
+
       color: var(--muted);
+
       font-size: 14px;
     }
 
     header nav {
       display: flex;
+
       gap: 16px;
     }
 
     header nav a {
       color: var(--muted);
+
       text-decoration: none;
+
       font-size: 14px;
     }
 
@@ -98,24 +115,30 @@
 
       border: 1px solid var(--border);
       border-radius: 18px;
+
       padding: 28px;
     }
 
     .project-intro h2 {
       margin: 0 0 12px;
+
       font-size: clamp(26px, 4vw, 36px);
     }
 
     .project-description {
       max-width: 850px;
+
       margin: 0;
+
       color: var(--muted);
+
       font-size: 15px;
       line-height: 1.7;
     }
 
     .info-heading {
       margin: 24px 0 10px;
+
       font-size: 15px;
       font-weight: 600;
     }
@@ -123,15 +146,20 @@
     .tags {
       display: flex;
       flex-wrap: wrap;
+
       gap: 8px;
     }
 
     .tag {
       color: var(--accent);
+
       background: rgba(96, 165, 250, 0.10);
+
       border: 1px solid rgba(96, 165, 250, 0.25);
       border-radius: 999px;
+
       padding: 6px 10px;
+
       font-size: 12px;
     }
 
@@ -145,13 +173,17 @@
 
     .section-header h2 {
       margin: 0 0 8px;
+
       font-size: clamp(22px, 3vw, 28px);
     }
 
     .section-header p {
       max-width: 800px;
+
       margin: 0;
+
       color: var(--muted);
+
       font-size: 14px;
       line-height: 1.6;
     }
@@ -159,7 +191,9 @@
     .demo-grid {
       display: grid;
       grid-template-columns: 1fr;
+
       gap: 18px;
+
       align-items: start;
     }
 
@@ -169,7 +203,12 @@
       }
     }
 
-    .card {
+    #canvasWrap {
+      width: 100%;
+      height: fit-content;
+
+      align-self: start;
+
       background:
         linear-gradient(
           180deg,
@@ -180,37 +219,47 @@
 
       border: 1px solid var(--border);
       border-radius: 16px;
+
       padding: 12px;
-    }
 
-    #imageCard {
-      align-self: start;
-      height: auto;
-      min-height: 0;
-    }
-
-    #canvasWrap {
-      width: 100%;
-      height: auto;
-      min-height: 0;
-      display: block;
-      background: #0a0f1c;
-      border: 1px solid rgba(148, 163, 184, 0.14);
-      border-radius: 12px;
-      overflow: hidden;
       line-height: 0;
+      overflow: hidden;
     }
 
     canvas.p5Canvas {
       display: block;
+
+      width: 100% !important;
+      height: auto !important;
+
       margin: 0;
       padding: 0;
-      max-width: 100%;
+
+      border: 1px solid rgba(148, 163, 184, 0.14);
+      border-radius: 12px;
+    }
+
+    .controls-card {
+      align-self: start;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0)
+        ),
+        var(--card);
+
+      border: 1px solid var(--border);
+      border-radius: 16px;
+
+      padding: 12px;
     }
 
     #controls {
       display: flex;
       flex-direction: column;
+
       gap: 12px;
     }
 
@@ -218,69 +267,97 @@
       display: flex;
       align-items: center;
       flex-wrap: wrap;
+
       gap: 10px;
+
       background: #0d1424;
+
       border: 1px solid rgba(148, 163, 184, 0.16);
       border-radius: 12px;
+
       padding: 12px;
     }
 
     .control label {
       min-width: 120px;
+
       color: var(--muted);
+
       font-size: 13px;
     }
 
     input[type="range"] {
       width: 220px;
       height: 4px;
+
       appearance: none;
+
       background: rgba(148, 163, 184, 0.25);
+
       border-radius: 999px;
+
       outline: none;
     }
 
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
+
       width: 16px;
       height: 16px;
+
       background: var(--accent);
+
       border: 2px solid #000;
       border-radius: 50%;
+
       box-shadow: 0 0 0 3px var(--ring);
+
       cursor: pointer;
     }
 
     input[type="file"] {
       max-width: 100%;
+
       background: #0d1424;
+
       color: var(--text);
+
       border: 1px solid rgba(148, 163, 184, 0.25);
       border-radius: 10px;
+
       padding: 8px 10px;
+
       font-size: 14px;
     }
 
     input[type="file"]::-webkit-file-upload-button {
       background: #0d1424;
+
       color: var(--text);
+
       border: 1px solid rgba(148, 163, 184, 0.25);
       border-radius: 8px;
+
       padding: 6px 8px;
+
       cursor: pointer;
     }
 
     footer {
       margin-top: 40px;
+
       color: var(--muted);
+
       text-align: center;
+
       font-size: 13px;
     }
 
     @media (max-width: 650px) {
       header {
         flex-direction: column;
+
         align-items: flex-start;
       }
 
@@ -303,7 +380,9 @@
 
       <div>
 
-        <h1>James Novosel</h1>
+        <h1>
+          James Novosel
+        </h1>
 
         <p class="sub">
           Computing Science student at UTS • Software Development • Sydney, Australia
@@ -355,10 +434,21 @@
 
       <div class="tags">
 
-        <span class="tag">JavaScript</span>
-        <span class="tag">p5.js</span>
-        <span class="tag">HTML</span>
-        <span class="tag">CSS</span>
+        <span class="tag">
+          JavaScript
+        </span>
+
+        <span class="tag">
+          p5.js
+        </span>
+
+        <span class="tag">
+          HTML
+        </span>
+
+        <span class="tag">
+          CSS
+        </span>
 
       </div>
 
@@ -368,11 +458,25 @@
 
       <div class="tags">
 
-        <span class="tag">K-Means Clustering</span>
-        <span class="tag">Image Processing</span>
-        <span class="tag">RGB Colour Data</span>
-        <span class="tag">Data Sampling</span>
-        <span class="tag">Data Visualisation</span>
+        <span class="tag">
+          K-Means Clustering
+        </span>
+
+        <span class="tag">
+          Image Processing
+        </span>
+
+        <span class="tag">
+          RGB Colour Data
+        </span>
+
+        <span class="tag">
+          Data Sampling
+        </span>
+
+        <span class="tag">
+          Data Visualisation
+        </span>
 
       </div>
 
@@ -398,11 +502,9 @@
 
       <div class="demo-grid">
 
-        <div class="card" id="imageCard">
-          <div id="canvasWrap"></div>
-        </div>
+        <div id="canvasWrap"></div>
 
-        <div class="card">
+        <div class="controls-card">
           <div id="controls"></div>
         </div>
 
@@ -420,6 +522,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
 
+
   <script>
 
     let k = 5;
@@ -434,6 +537,7 @@
     let kSlider;
     let iterSlider;
     let stepSlider;
+
     let fileInput;
     let folderInput;
 
@@ -442,7 +546,9 @@
 
     function preload() {
 
-      img = loadImage('Zeri_0.jpg');
+      img = loadImage(
+        'Zeri_0.jpg'
+      );
 
     }
 
@@ -451,17 +557,18 @@
 
       noStroke();
 
-      const controlsHost = select('#controls');
-      const canvasHost = document.getElementById('canvasWrap');
+      const controlsHost =
+        select('#controls');
 
-      const totalW = Math.floor(
-        canvasHost.clientWidth
-      );
+      const availableWidth =
+        getAvailableCanvasWidth();
+
 
       const dimensions =
         getCanvasDimensions(
-          totalW
+          availableWidth
         );
+
 
       const cnv =
         createCanvas(
@@ -469,7 +576,11 @@
           dimensions.height
         );
 
-      cnv.parent('canvasWrap');
+
+      cnv.parent(
+        'canvasWrap'
+      );
+
 
       cnv.addClass(
         'p5Canvas'
@@ -485,9 +596,11 @@
                 controlsHost
               );
 
+
           wrap.addClass(
             'control'
           );
+
 
           const lab =
             createElement(
@@ -498,15 +611,18 @@
               wrap
             );
 
+
           lab.style(
             'min-width',
             '120px'
           );
 
+
           lab.style(
             'color',
             'var(--muted)'
           );
+
 
           elt.parent(
             wrap
@@ -523,9 +639,11 @@
           1
         );
 
+
       kSlider.input(
         scheduleRecompute
       );
+
 
       row(
         'Clusters (k)',
@@ -541,9 +659,11 @@
           1
         );
 
+
       iterSlider.input(
         scheduleRecompute
       );
+
 
       row(
         'Iterations',
@@ -559,9 +679,11 @@
           1
         );
 
+
       stepSlider.input(
         scheduleRecompute
       );
+
 
       row(
         'Quality (STEP)',
@@ -573,6 +695,7 @@
         createFileInput(
           handleFileUpload
         );
+
 
       row(
         'Image',
@@ -597,9 +720,11 @@
           ''
         );
 
+
       folderInput.changed(
         handleFolderUpload
       );
+
 
       row(
         'Folder',
@@ -614,11 +739,49 @@
     }
 
 
+    function getAvailableCanvasWidth() {
+
+      const host =
+        document.getElementById(
+          'canvasWrap'
+        );
+
+
+      const style =
+        window.getComputedStyle(
+          host
+        );
+
+
+      const paddingLeft =
+        parseFloat(
+          style.paddingLeft
+        ) || 0;
+
+
+      const paddingRight =
+        parseFloat(
+          style.paddingRight
+        ) || 0;
+
+
+      return Math.max(
+        1,
+        Math.floor(
+          host.clientWidth -
+          paddingLeft -
+          paddingRight
+        )
+      );
+
+    }
+
+
     function getCanvasDimensions(
       availableWidth
     ) {
 
-      const stripW =
+      const paletteWidth =
         clamp(
           Math.round(
             availableWidth * 0.18
@@ -627,15 +790,19 @@
           260
         );
 
+
       const imageWidth =
         Math.max(
           1,
-          availableWidth - stripW
+          availableWidth -
+          paletteWidth
         );
+
 
       const scale =
         imageWidth /
         img.width;
+
 
       const imageHeight =
         Math.round(
@@ -643,7 +810,9 @@
           scale
         );
 
+
       return {
+
         width:
           availableWidth,
 
@@ -654,7 +823,8 @@
           imageWidth,
 
         paletteWidth:
-          stripW
+          paletteWidth
+
       };
 
     }
@@ -673,25 +843,22 @@
         return;
       }
 
-      const canvasHost =
-        document.getElementById(
-          'canvasWrap'
-        );
 
-      const totalW =
-        Math.floor(
-          canvasHost.clientWidth
-        );
+      const availableWidth =
+        getAvailableCanvasWidth();
+
 
       const dimensions =
         getCanvasDimensions(
-          totalW
+          availableWidth
         );
+
 
       resizeCanvas(
         dimensions.width,
         dimensions.height
       );
+
 
       redraw();
 
@@ -703,8 +870,10 @@
       k =
         kSlider.value();
 
+
       ITER =
         iterSlider.value();
+
 
       STEP =
         stepSlider.value();
@@ -833,6 +1002,7 @@
             img =
               loaded;
 
+
             recompute();
 
           },
@@ -891,7 +1061,9 @@
           img =
             loaded;
 
+
           recompute();
+
 
           URL.revokeObjectURL(
             url
@@ -942,13 +1114,21 @@
 
 
           const r =
-            img.pixels[index];
+            img.pixels[
+              index
+            ];
+
 
           const g =
-            img.pixels[index + 1];
+            img.pixels[
+              index + 1
+            ];
+
 
           const b =
-            img.pixels[index + 2];
+            img.pixels[
+              index + 2
+            ];
 
 
           sampleArray.push(
@@ -1059,6 +1239,7 @@
               bestDistance =
                 currentDistance;
 
+
               bestPosition =
                 c;
 
@@ -1110,8 +1291,10 @@
           sums[cluster][0] +=
             sampleArray[i][0];
 
+
           sums[cluster][1] +=
             sampleArray[i][1];
+
 
           sums[cluster][2] +=
             sampleArray[i][2];
@@ -1195,9 +1378,11 @@
         a[0] -
         b[0];
 
+
       const dg =
         a[1] -
         b[1];
+
 
       const db =
         a[2] -
