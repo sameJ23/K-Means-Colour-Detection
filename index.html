@@ -10,7 +10,6 @@
   <style>
     :root {
       --bg: #0f172a;
-      --panel: #111827;
       --text: #e5e7eb;
       --muted: #94a3b8;
       --accent: #60a5fa;
@@ -27,24 +26,10 @@
       scroll-behavior: smooth;
     }
 
-    html,
-    body {
-      min-height: 100%;
-    }
-
     body {
       margin: 0;
-
-      font-family:
-        system-ui,
-        -apple-system,
-        Segoe UI,
-        Roboto,
-        Ubuntu,
-        Cantarell,
-        Noto Sans,
-        "Helvetica Neue",
-        Arial;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+        Cantarell, Noto Sans, "Helvetica Neue", Arial;
 
       background:
         radial-gradient(
@@ -68,19 +53,12 @@
       padding: 48px 20px 72px;
     }
 
-    /* HEADER */
-
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
       margin-bottom: 28px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
     }
 
     header h1 {
@@ -109,8 +87,6 @@
       color: var(--text);
     }
 
-    /* PROJECT INTRO */
-
     .project-intro {
       background:
         linear-gradient(
@@ -122,7 +98,6 @@
 
       border: 1px solid var(--border);
       border-radius: 18px;
-
       padding: 28px;
     }
 
@@ -132,21 +107,15 @@
     }
 
     .project-description {
-      margin: 0;
-
       max-width: 850px;
-
+      margin: 0;
       color: var(--muted);
-
       font-size: 15px;
       line-height: 1.7;
     }
 
     .info-heading {
       margin: 24px 0 10px;
-
-      color: var(--text);
-
       font-size: 15px;
       font-weight: 600;
     }
@@ -154,24 +123,17 @@
     .tags {
       display: flex;
       flex-wrap: wrap;
-
       gap: 8px;
     }
 
     .tag {
       color: var(--accent);
-
       background: rgba(96, 165, 250, 0.10);
-
       border: 1px solid rgba(96, 165, 250, 0.25);
       border-radius: 999px;
-
       padding: 6px 10px;
-
       font-size: 12px;
     }
-
-    /* DEMO SECTION */
 
     .demo-section {
       margin-top: 42px;
@@ -183,17 +145,13 @@
 
     .section-header h2 {
       margin: 0 0 8px;
-
       font-size: clamp(22px, 3vw, 28px);
     }
 
     .section-header p {
-      margin: 0;
-
       max-width: 800px;
-
+      margin: 0;
       color: var(--muted);
-
       font-size: 14px;
       line-height: 1.6;
     }
@@ -201,8 +159,8 @@
     .demo-grid {
       display: grid;
       grid-template-columns: 1fr;
-
       gap: 18px;
+      align-items: start;
     }
 
     @media (min-width: 900px) {
@@ -222,41 +180,33 @@
 
       border: 1px solid var(--border);
       border-radius: 16px;
+      padding: 12px;
 
-      padding: 16px;
+      height: fit-content;
+      align-self: start;
     }
-
-    /* DEMO CANVAS */
 
     #canvasWrap {
       width: 100%;
-
-      display: grid;
-      place-items: center;
-
+      height: auto;
+      display: block;
       background: #0a0f1c;
-
       border: 1px solid rgba(148, 163, 184, 0.14);
       border-radius: 12px;
-
       overflow: hidden;
+      line-height: 0;
     }
 
     canvas.p5Canvas {
+      display: block;
       width: 100%;
       height: auto;
-
-      display: block;
-
       border-radius: 12px;
     }
-
-    /* CONTROLS */
 
     #controls {
       display: flex;
       flex-direction: column;
-
       gap: 12px;
     }
 
@@ -264,130 +214,70 @@
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-
       gap: 10px;
-
       background: #0d1424;
-
       border: 1px solid rgba(148, 163, 184, 0.16);
       border-radius: 12px;
-
       padding: 12px;
     }
 
     .control label {
       min-width: 120px;
-
       color: var(--muted);
-
       font-size: 13px;
     }
 
     input[type="range"] {
       width: 220px;
       height: 4px;
-
       appearance: none;
-
+      background: rgba(148, 163, 184, 0.25);
       border-radius: 999px;
-
       outline: none;
-
-      background:
-        linear-gradient(
-          to right,
-          var(--accent) 0%,
-          var(--accent) var(--value, 0%),
-          rgba(148, 163, 184, 0.25) var(--value, 0%),
-          rgba(148, 163, 184, 0.25) 100%
-        );
     }
 
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-
       width: 16px;
       height: 16px;
-
-      border-radius: 50%;
-
       background: var(--accent);
       border: 2px solid #000;
-
+      border-radius: 50%;
       box-shadow: 0 0 0 3px var(--ring);
-
       cursor: pointer;
     }
 
-    input[type="file"],
-    input[type="number"],
-    select,
-    button {
+    input[type="file"] {
+      max-width: 100%;
       background: #0d1424;
-
+      color: var(--text);
       border: 1px solid rgba(148, 163, 184, 0.25);
       border-radius: 10px;
-
-      color: var(--text);
-
       padding: 8px 10px;
-
       font-size: 14px;
     }
 
     input[type="file"]::-webkit-file-upload-button {
       background: #0d1424;
-
       color: var(--text);
-
       border: 1px solid rgba(148, 163, 184, 0.25);
       border-radius: 8px;
-
       padding: 6px 8px;
-
       cursor: pointer;
     }
-
-    button:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--ring);
-
-      cursor: pointer;
-    }
-
-    #controls input:focus,
-    #controls select:focus,
-    #controls button:focus {
-      outline: none;
-
-      border-color: var(--accent);
-
-      box-shadow: 0 0 0 3px var(--ring);
-    }
-
-    /* FOOTER */
 
     footer {
       margin-top: 40px;
-
       color: var(--muted);
-
-      font-size: 13px;
-
       text-align: center;
+      font-size: 13px;
     }
-
-    /* MOBILE */
 
     @media (max-width: 650px) {
       header {
-        align-items: flex-start;
         flex-direction: column;
-      }
-
-      header nav {
-        gap: 14px;
+        align-items: flex-start;
       }
 
       input[type="range"] {
@@ -405,24 +295,15 @@
 
   <div class="wrap">
 
-    <!-- HEADER -->
-
     <header>
 
-      <div class="brand">
+      <div>
+        <h1>James Novosel</h1>
 
-        <div>
-
-          <h1>James Novosel</h1>
-
-          <p class="sub">
-            Computing Science student at UTS • Software Development • Sydney, Australia
-          </p>
-
-        </div>
-
+        <p class="sub">
+          Computing Science student at UTS • Software Development • Sydney, Australia
+        </p>
       </div>
-
 
       <nav>
 
@@ -443,25 +324,24 @@
     </header>
 
 
-    <!-- PROJECT INTRODUCTION -->
-
     <section class="project-intro">
 
-      <h2>K-Means Colour Detection</h2>
+      <h2>
+        K-Means Colour Detection
+      </h2>
 
       <p class="project-description">
         K-Means Colour Detection is an interactive image processing project
         that identifies the dominant colours within an image using K-Means
         clustering.
 
-        Users can upload an image and control the number of colour clusters,
-        iterations and sampling quality. The image is sampled as RGB colour
-        data before the K-Means algorithm groups similar colours together.
+        Users can adjust the number of colour clusters, iterations and
+        sampling quality. The image is sampled as RGB colour data before the
+        K-Means algorithm groups similar colours together.
 
-        The resulting cluster centres are sorted and displayed as a colour
-        palette alongside the original image.
+        The resulting cluster centres are sorted by brightness and displayed
+        as a colour palette alongside the original image.
       </p>
-
 
       <h3 class="info-heading">
         Languages & Libraries
@@ -475,7 +355,6 @@
         <span class="tag">CSS</span>
 
       </div>
-
 
       <h3 class="info-heading">
         Key Topics
@@ -494,18 +373,18 @@
     </section>
 
 
-    <!-- INTERACTIVE DEMO -->
-
     <section class="demo-section">
 
       <div class="section-header">
 
-        <h2>Interactive Demo</h2>
+        <h2>
+          Interactive Demo
+        </h2>
 
         <p>
-          The demo starts with an example image already loaded. Adjust the
-          clustering settings to see how the generated colour palette changes,
-          or upload your own image to analyse it.
+          An example image is loaded automatically below. Adjust the clustering
+          settings to see how the generated palette changes, or upload another
+          image to analyse your own.
         </p>
 
       </div>
@@ -514,16 +393,11 @@
       <div class="demo-grid">
 
         <div class="card">
-
           <div id="canvasWrap"></div>
-
         </div>
 
-
         <div class="card">
-
           <div id="controls"></div>
-
         </div>
 
       </div>
@@ -532,18 +406,13 @@
 
 
     <footer>
-
       © <span id="y"></span> James Novosel • Sydney, Australia
-
     </footer>
 
   </div>
 
 
-  <!-- P5.JS -->
-
   <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
-
 
   <script>
 
@@ -559,22 +428,15 @@
     let kSlider;
     let iterSlider;
     let stepSlider;
-
     let fileInput;
     let folderInput;
 
     let recomputeTimer;
 
 
-    /*
-     * Load the example image automatically
-     * before the demo starts.
-     */
     function preload() {
 
-      img = loadImage(
-        'Zeri_0.jpg'
-      );
+      img = loadImage('Zeri_0.jpg');
 
     }
 
@@ -586,71 +448,61 @@
       const controlsHost = select('#controls');
       const canvasHost = select('#canvasWrap');
 
+      const totalW = canvasHost.elt.clientWidth || 960;
 
-      const w = canvasHost.elt.clientWidth || 960;
-
-      const h = Math.round(
-        w * 9 / 16
+      const stripW = clamp(
+        Math.round(totalW * 0.18),
+        120,
+        260
       );
 
+      const imgTargetW = Math.max(
+        1,
+        totalW - stripW
+      );
+
+      const scale = imgTargetW / img.width;
+
+      const imgH = Math.round(
+        img.height * scale
+      );
 
       const cnv = createCanvas(
-        w,
-        h
+        totalW,
+        imgH
       );
 
-
-      cnv.parent(
-        'canvasWrap'
-      );
-
-      cnv.addClass(
-        'p5Canvas'
-      );
+      cnv.parent('canvasWrap');
+      cnv.addClass('p5Canvas');
 
 
-      /*
-       * Creates a labelled row for each control.
-       */
       const row = (labelText, elt) => {
 
         const wrap = createDiv()
           .parent(controlsHost);
 
-
-        wrap.addClass(
-          'control'
-        );
-
+        wrap.addClass('control');
 
         const lab = createElement(
           'label',
           labelText
         ).parent(wrap);
 
-
         lab.style(
           'min-width',
           '120px'
         );
-
 
         lab.style(
           'color',
           'var(--muted)'
         );
 
-
-        elt.parent(
-          wrap
-        );
+        elt.parent(wrap);
 
       };
 
 
-      /*
-       * Number of clusters.
-       */
       kSlider = createSlider(
         2,
         12,
@@ -658,11 +510,9 @@
         1
       );
 
-
       kSlider.input(
         scheduleRecompute
       );
-
 
       row(
         'Clusters (k)',
@@ -670,9 +520,6 @@
       );
 
 
-      /*
-       * Number of K-Means iterations.
-       */
       iterSlider = createSlider(
         1,
         1000,
@@ -680,11 +527,9 @@
         1
       );
 
-
       iterSlider.input(
         scheduleRecompute
       );
-
 
       row(
         'Iterations',
@@ -692,9 +537,6 @@
       );
 
 
-      /*
-       * Image sampling quality.
-       */
       stepSlider = createSlider(
         1,
         20,
@@ -702,11 +544,9 @@
         1
       );
 
-
       stepSlider.input(
         scheduleRecompute
       );
-
 
       row(
         'Quality (STEP)',
@@ -714,13 +554,9 @@
       );
 
 
-      /*
-       * Single image upload.
-       */
       fileInput = createFileInput(
         handleFileUpload
       );
-
 
       row(
         'Image',
@@ -728,9 +564,6 @@
       );
 
 
-      /*
-       * Folder upload.
-       */
       folderInput = createElement(
         'input'
       )
@@ -747,11 +580,9 @@
           ''
         );
 
-
       folderInput.changed(
         handleFolderUpload
       );
-
 
       row(
         'Folder',
@@ -759,18 +590,8 @@
       );
 
 
-      /*
-       * Stop continuous rendering.
-       * Re-render only when required.
-       */
       noLoop();
 
-
-      /*
-       * Immediately process Zeri_0.jpg
-       * so the demo is populated when
-       * the page opens.
-       */
       recompute();
 
     }
@@ -788,11 +609,8 @@
     function scheduleRecompute() {
 
       k = kSlider.value();
-
       ITER = iterSlider.value();
-
       STEP = stepSlider.value();
-
 
       if (recomputeTimer) {
 
@@ -801,7 +619,6 @@
         );
 
       }
-
 
       recomputeTimer = setTimeout(
         recompute,
@@ -817,48 +634,28 @@
         'canvasWrap'
       );
 
-
-      const totalW =
-        host.clientWidth || 960;
-
+      const totalW = host.clientWidth || 960;
 
       if (!img) {
-
-        resizeCanvas(
-          totalW,
-          Math.round(
-            totalW * 9 / 16
-          )
-        );
-
         return;
-
       }
 
-
       const stripW = clamp(
-        Math.round(
-          totalW * 0.18
-        ),
+        Math.round(totalW * 0.18),
         120,
         260
       );
-
 
       const imgTargetW = Math.max(
         1,
         totalW - stripW
       );
 
-
-      const scale =
-        imgTargetW / img.width;
-
+      const scale = imgTargetW / img.width;
 
       const imgH = Math.round(
         img.height * scale
       );
-
 
       resizeCanvas(
         totalW,
@@ -868,13 +665,17 @@
     }
 
 
-    function clamp(v, lo, hi) {
+    function clamp(
+      value,
+      minimum,
+      maximum
+    ) {
 
       return Math.max(
-        lo,
+        minimum,
         Math.min(
-          hi,
-          v
+          maximum,
+          value
         )
       );
 
@@ -883,37 +684,29 @@
 
     function draw() {
 
-      if (!img) return;
-
+      if (!img) {
+        return;
+      }
 
       const totalW = width;
 
-
       const stripW = clamp(
-        Math.round(
-          totalW * 0.18
-        ),
+        Math.round(totalW * 0.18),
         120,
         260
       );
 
-
       const imgW =
         totalW - stripW;
-
 
       const scale =
         imgW / img.width;
 
+      const imgH =
+        Math.round(
+          img.height * scale
+        );
 
-      const imgH = Math.round(
-        img.height * scale
-      );
-
-
-      /*
-       * Original image.
-       */
       image(
         img,
         0,
@@ -922,21 +715,12 @@
         imgH
       );
 
-
-      /*
-       * Generated palette.
-       */
-      const stripX = imgW;
-      const stripY = 0;
-      const stripH = imgH;
-
-
       showPalette(
         centroids,
-        stripX,
-        stripY,
+        imgW,
+        0,
         stripW,
-        stripH
+        imgH
       );
 
     }
@@ -944,23 +728,21 @@
 
     function recompute() {
 
-      if (!img) return;
-
+      if (!img) {
+        return;
+      }
 
       sampleArray.length = 0;
-
 
       sample(
         img,
         STEP
       );
 
-
       centroids = kmeans(
         ITER,
         k
       );
-
 
       fitCanvasToHost();
 
@@ -969,7 +751,9 @@
     }
 
 
-    function handleFileUpload(file) {
+    function handleFileUpload(
+      file
+    ) {
 
       if (
         file &&
@@ -981,7 +765,7 @@
 
           file.data,
 
-          (loaded) => {
+          function(loaded) {
 
             img = loaded;
 
@@ -989,11 +773,11 @@
 
           },
 
-          (err) => {
+          function(error) {
 
             console.error(
               'Image load failed:',
-              err
+              error
             );
 
           }
@@ -1016,23 +800,20 @@
           )
       );
 
-
       if (!files.length) {
         return;
       }
-
 
       const url =
         URL.createObjectURL(
           files[0]
         );
 
-
       loadImage(
 
         url,
 
-        (loaded) => {
+        function(loaded) {
 
           img = loaded;
 
@@ -1044,11 +825,11 @@
 
         },
 
-        (err) => {
+        function(error) {
 
           console.error(
             'Folder image load failed:',
-            err
+            error
           );
 
         }
@@ -1065,37 +846,40 @@
 
       img.loadPixels();
 
-
       for (
-        let i = 0;
-        i < img.height;
-        i += step
+        let y = 0;
+        y < img.height;
+        y += step
       ) {
 
         for (
-          let j = 0;
-          j < img.width;
-          j += step
+          let x = 0;
+          x < img.width;
+          x += step
         ) {
 
-          let index =
+          const index =
             (
-              i * img.width + j
+              y *
+              img.width +
+              x
             ) * 4;
 
-
-          let r =
+          const r =
             img.pixels[index];
 
-          let g =
+          const g =
             img.pixels[index + 1];
 
-          let b =
+          const b =
             img.pixels[index + 2];
 
-
           sampleArray.push(
-            [r, g, b]
+            [
+              r,
+              g,
+              b
+            ]
           );
 
         }
@@ -1106,80 +890,67 @@
 
 
     function kmeans(
-      iter,
-      k
+      iterations,
+      clusterCount
     ) {
 
       let topColours = [];
 
-
-      /*
-       * Pick initial random centroids.
-       */
       for (
-        let y = 0;
-        y < k;
-        y++
+        let i = 0;
+        i < clusterCount;
+        i++
       ) {
 
-        let randColour =
+        let randomColour =
           random(
             sampleArray
           );
 
-
         while (
           containsColour(
             topColours,
-            randColour
+            randomColour
           )
         ) {
 
-          randColour =
+          randomColour =
             random(
               sampleArray
             );
 
         }
 
-
         topColours.push(
-          [...randColour]
+          [
+            ...randomColour
+          ]
         );
 
       }
 
 
-      /*
-       * K-Means iterations.
-       */
       for (
-        let x = 0;
-        x < iter;
-        x++
+        let iteration = 0;
+        iteration < iterations;
+        iteration++
       ) {
 
         const closest = [];
 
-
-        /*
-         * Assign every sampled colour
-         * to its closest centroid.
-         */
         for (
-          let z = 0;
-          z < sampleArray.length;
-          z++
+          let i = 0;
+          i < sampleArray.length;
+          i++
         ) {
 
-          let bestDistancePos = 0;
+          let bestPosition = 0;
 
-
-          let bestDistance = distance(
-            sampleArray[z],
-            topColours[0]
-          );
-
+          let bestDistance =
+            distance(
+              sampleArray[i],
+              topColours[0]
+            );
 
           for (
             let c = 1;
@@ -1189,10 +960,9 @@
 
             const currentDistance =
               distance(
-                sampleArray[z],
+                sampleArray[i],
                 topColours[c]
               );
-
 
             if (
               currentDistance <
@@ -1202,31 +972,38 @@
               bestDistance =
                 currentDistance;
 
-              bestDistancePos = c;
+              bestPosition =
+                c;
 
             }
 
           }
 
-
           closest.push(
-            bestDistancePos
+            bestPosition
           );
 
         }
 
 
-        /*
-         * Recalculate cluster centres.
-         */
-        const sums = Array.from(
-          { length: k },
-          () => [0, 0, 0]
-        );
-
+        const sums =
+          Array.from(
+            {
+              length:
+                clusterCount
+            },
+            () => [
+              0,
+              0,
+              0
+            ]
+          );
 
         const counts =
-          new Array(k).fill(0);
+          new Array(
+            clusterCount
+          )
+          .fill(0);
 
 
         for (
@@ -1235,61 +1012,57 @@
           i++
         ) {
 
-          const cid =
+          const cluster =
             closest[i];
 
-
-          sums[cid][0] +=
+          sums[cluster][0] +=
             sampleArray[i][0];
 
-          sums[cid][1] +=
+          sums[cluster][1] +=
             sampleArray[i][1];
 
-          sums[cid][2] +=
+          sums[cluster][2] +=
             sampleArray[i][2];
 
-
-          counts[cid]++;
+          counts[cluster]++;
 
         }
 
 
         for (
-          let j = 0;
-          j < k;
-          j++
+          let i = 0;
+          i < clusterCount;
+          i++
         ) {
 
           if (
-            counts[j] > 0
+            counts[i] > 0
           ) {
 
-            topColours[j] = [
+            topColours[i] =
+              [
 
-              sums[j][0] /
-              counts[j],
+                sums[i][0] /
+                counts[i],
 
-              sums[j][1] /
-              counts[j],
+                sums[i][1] /
+                counts[i],
 
-              sums[j][2] /
-              counts[j]
+                sums[i][2] /
+                counts[i]
 
-            ];
+              ];
 
           }
 
           else {
 
-            /*
-             * Give an empty cluster
-             * a new random colour.
-             */
-            topColours[j] = [
-              ...random(
-                sampleArray
-              )
-            ];
+            topColours[i] =
+              [
+                ...random(
+                  sampleArray
+                )
+              ];
 
           }
 
@@ -1299,21 +1072,22 @@
 
 
       return topColours.map(
-        colour => [
+        colour =>
+          [
 
-          Math.round(
-            colour[0]
-          ),
+            Math.round(
+              colour[0]
+            ),
 
-          Math.round(
-            colour[1]
-          ),
+            Math.round(
+              colour[1]
+            ),
 
-          Math.round(
-            colour[2]
-          )
+            Math.round(
+              colour[2]
+            )
 
-        ]
+          ]
       );
 
     }
@@ -1324,15 +1098,17 @@
       b
     ) {
 
-      let dr =
-        a[0] - b[0];
+      const dr =
+        a[0] -
+        b[0];
 
-      let dg =
-        a[1] - b[1];
+      const dg =
+        a[1] -
+        b[1];
 
-      let db =
-        a[2] - b[2];
-
+      const db =
+        a[2] -
+        b[2];
 
       return (
         dr * dr +
@@ -1363,9 +1139,9 @@
     ) {
 
       return list.some(
-        currentColour =>
+        current =>
           coloursEqual(
-            currentColour,
+            current,
             colour
           )
       );
@@ -1374,79 +1150,69 @@
 
 
     function showPalette(
-      cols,
+      colours,
       x,
       y,
-      w,
-      h
+      paletteWidth,
+      paletteHeight
     ) {
 
       if (
-        !cols ||
-        !cols.length
+        !colours ||
+        !colours.length
       ) {
-
         return;
-
       }
 
-
-      /*
-       * Sort palette from lightest
-       * to darkest by luminance.
-       */
       const sorted =
-        [...cols].sort(
+        [
+          ...colours
+        ]
+        .sort(
           (a, b) =>
             luminanceRGB(b) -
             luminanceRGB(a)
         );
 
-
       noStroke();
 
-
-      /*
-       * Smooth gradients between
-       * neighbouring palette colours.
-       */
       for (
-        let c = 0;
-        c < sorted.length - 1;
-        c++
+        let colourIndex = 0;
+        colourIndex <
+        sorted.length - 1;
+        colourIndex++
       ) {
 
         for (
-          let p = 0;
-          p < 1;
-          p += 0.01
+          let amount = 0;
+          amount < 1;
+          amount += 0.01
         ) {
 
-          const c1 = color(
-            sorted[c][0],
-            sorted[c][1],
-            sorted[c][2]
-          );
+          const colourOne =
+            color(
+              sorted[colourIndex][0],
+              sorted[colourIndex][1],
+              sorted[colourIndex][2]
+            );
 
+          const colourTwo =
+            color(
+              sorted[colourIndex + 1][0],
+              sorted[colourIndex + 1][1],
+              sorted[colourIndex + 1][2]
+            );
 
-          const c2 = color(
-            sorted[c + 1][0],
-            sorted[c + 1][1],
-            sorted[c + 1][2]
-          );
-
-
-          const mid = lerpColor(
-            c1,
-            c2,
-            p
-          );
-
+          const middleColour =
+            lerpColor(
+              colourOne,
+              colourTwo,
+              amount
+            );
 
           fill(
-            mid
+            middleColour
           );
-
 
           rect(
 
@@ -1454,15 +1220,24 @@
 
             y +
             (
-              h /
-              (sorted.length - 1)
+              paletteHeight /
+              (
+                sorted.length -
+                1
+              )
             ) *
-            (c + p),
+            (
+              colourIndex +
+              amount
+            ),
 
-            w,
+            paletteWidth,
 
-            h /
-            (sorted.length - 1)
+            paletteHeight /
+            (
+              sorted.length -
+              1
+            )
 
           );
 
@@ -1471,11 +1246,9 @@
       }
 
 
-      /*
-       * Solid palette blocks.
-       */
-      const cellH =
-        h / sorted.length;
+      const cellHeight =
+        paletteHeight /
+        sorted.length;
 
 
       for (
@@ -1490,12 +1263,13 @@
           sorted[i][2]
         );
 
-
         rect(
           x,
-          y + i * cellH,
-          w,
-          cellH + 1
+          y +
+          i *
+          cellHeight,
+          paletteWidth,
+          cellHeight + 1
         );
 
       }
@@ -1503,12 +1277,19 @@
     }
 
 
-    function luminanceRGB(c) {
+    function luminanceRGB(
+      colour
+    ) {
 
       return (
-        0.2126 * c[0] +
-        0.7152 * c[1] +
-        0.0722 * c[2]
+        0.2126 *
+        colour[0] +
+
+        0.7152 *
+        colour[1] +
+
+        0.0722 *
+        colour[2]
       );
 
     }
