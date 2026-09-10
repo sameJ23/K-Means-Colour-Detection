@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <title>K-Means Colour Detection | James Novosel</title>
 
@@ -15,8 +14,8 @@
       --muted: #94a3b8;
       --accent: #60a5fa;
       --card: #0b1220;
-      --border: rgba(148,163,184,.12);
-      --ring: rgba(96,165,250,.4);
+      --border: rgba(148, 163, 184, 0.12);
+      --ring: rgba(96, 165, 250, 0.4);
     }
 
     * {
@@ -34,27 +33,18 @@
 
     body {
       margin: 0;
-
-      font-family:
-        system-ui,
-        -apple-system,
-        Segoe UI,
-        Roboto,
-        Ubuntu,
-        Cantarell,
-        Noto Sans,
-        "Helvetica Neue",
-        Arial;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu,
+        Cantarell, Noto Sans, "Helvetica Neue", Arial;
 
       background:
         radial-gradient(
           1200px 600px at 10% 0%,
-          rgba(96,165,250,.08),
+          rgba(96, 165, 250, 0.08),
           transparent 60%
         ),
         radial-gradient(
           900px 500px at 90% 10%,
-          rgba(16,185,129,.08),
+          rgba(16, 185, 129, 0.08),
           transparent 60%
         ),
         var(--bg);
@@ -68,17 +58,11 @@
       padding: 48px 20px 72px;
     }
 
-    /* =========================
-       HEADER
-       ========================= */
-
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-
       gap: 16px;
-
       margin-bottom: 28px;
     }
 
@@ -94,7 +78,6 @@
 
     header .sub {
       margin: 6px 0 0;
-
       color: var(--muted);
       font-size: 14px;
     }
@@ -114,22 +97,17 @@
       color: var(--text);
     }
 
-    /* =========================
-       PROJECT INTRODUCTION
-       ========================= */
-
     .project-intro {
       background:
         linear-gradient(
           180deg,
-          rgba(255,255,255,.02),
-          rgba(255,255,255,0)
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0)
         ),
         var(--card);
 
       border: 1px solid var(--border);
       border-radius: 18px;
-
       padding: 24px;
     }
 
@@ -149,37 +127,28 @@
     .project-image {
       width: 100%;
       aspect-ratio: 16 / 9;
-
       object-fit: cover;
-
       display: block;
-
       background: #0a0f1c;
-
-      border: 1px solid rgba(148,163,184,.14);
+      border: 1px solid rgba(148, 163, 184, 0.14);
       border-radius: 12px;
     }
 
     .project-info h2 {
       margin: 0 0 10px;
-
       font-size: clamp(26px, 4vw, 36px);
     }
 
     .project-description {
       margin: 0;
-
       color: var(--muted);
-
       font-size: 15px;
       line-height: 1.7;
     }
 
     .info-heading {
       margin: 22px 0 10px;
-
       color: var(--text);
-
       font-size: 15px;
       font-weight: 600;
     }
@@ -187,69 +156,17 @@
     .tags {
       display: flex;
       flex-wrap: wrap;
-
       gap: 8px;
     }
 
     .tag {
       color: var(--accent);
-
-      background: rgba(96,165,250,.10);
-
-      border: 1px solid rgba(96,165,250,.25);
+      background: rgba(96, 165, 250, 0.10);
+      border: 1px solid rgba(96, 165, 250, 0.25);
       border-radius: 999px;
-
       padding: 6px 10px;
-
       font-size: 12px;
     }
-
-    .project-actions {
-      display: flex;
-      flex-wrap: wrap;
-
-      gap: 10px;
-
-      margin-top: 22px;
-    }
-
-    .btn {
-      display: inline-block;
-
-      background: #0d1424;
-
-      color: var(--text);
-
-      border: 1px solid rgba(148,163,184,.2);
-      border-radius: 10px;
-
-      padding: 10px 14px;
-
-      text-decoration: none;
-
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .btn:hover {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--ring);
-    }
-
-    .btn.primary {
-      background:
-        linear-gradient(
-          135deg,
-          rgba(96,165,250,.15),
-          rgba(52,211,153,.15)
-        );
-
-      border-color: rgba(96,165,250,.35);
-    }
-
-    /* =========================
-       DEMO SECTION
-       ========================= */
 
     .demo-section {
       margin-top: 42px;
@@ -261,17 +178,13 @@
 
     .section-header h2 {
       margin: 0 0 8px;
-
       font-size: clamp(22px, 3vw, 28px);
     }
 
     .section-header p {
       margin: 0;
-
       max-width: 760px;
-
       color: var(--muted);
-
       font-size: 14px;
       line-height: 1.6;
     }
@@ -279,7 +192,6 @@
     .demo-grid {
       display: grid;
       grid-template-columns: 1fr;
-
       gap: 18px;
     }
 
@@ -293,48 +205,36 @@
       background:
         linear-gradient(
           180deg,
-          rgba(255,255,255,.02),
-          rgba(255,255,255,0)
+          rgba(255, 255, 255, 0.02),
+          rgba(255, 255, 255, 0)
         ),
         var(--card);
 
       border: 1px solid var(--border);
       border-radius: 16px;
-
       padding: 16px;
     }
 
-    /* =========================
-       P5 DEMO
-       ========================= */
-
     #canvasWrap {
       width: 100%;
-
       display: grid;
       place-items: center;
-
       background: #0a0f1c;
-
-      border: 1px solid rgba(148,163,184,.14);
+      border: 1px solid rgba(148, 163, 184, 0.14);
       border-radius: 12px;
-
       overflow: hidden;
     }
 
     canvas.p5Canvas {
       width: 100%;
       height: auto;
-
       display: block;
-
       border-radius: 12px;
     }
 
     #controls {
       display: flex;
       flex-direction: column;
-
       gap: 12px;
     }
 
@@ -342,33 +242,24 @@
       display: flex;
       align-items: center;
       flex-wrap: wrap;
-
       gap: 10px;
-
       background: #0d1424;
-
-      border: 1px solid rgba(148,163,184,.16);
+      border: 1px solid rgba(148, 163, 184, 0.16);
       border-radius: 12px;
-
       padding: 12px;
     }
 
     .control label {
       min-width: 120px;
-
       color: var(--muted);
-
       font-size: 13px;
     }
 
     input[type="range"] {
       width: 220px;
       height: 4px;
-
       appearance: none;
-
       border-radius: 999px;
-
       outline: none;
 
       background:
@@ -376,25 +267,20 @@
           to right,
           var(--accent) 0%,
           var(--accent) var(--value, 0%),
-          rgba(148,163,184,.25) var(--value, 0%),
-          rgba(148,163,184,.25) 100%
+          rgba(148, 163, 184, 0.25) var(--value, 0%),
+          rgba(148, 163, 184, 0.25) 100%
         );
     }
 
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-
       width: 16px;
       height: 16px;
-
       border-radius: 50%;
-
       background: var(--accent);
       border: 2px solid #000;
-
       box-shadow: 0 0 0 3px var(--ring);
-
       cursor: pointer;
     }
 
@@ -403,34 +289,25 @@
     select,
     button {
       background: #0d1424;
-
-      border: 1px solid rgba(148,163,184,.25);
-      border-radius: 10px;
-
+      border: 1px solid rgba(148, 163, 184, 0.25);
       color: var(--text);
-
       padding: 8px 10px;
-
+      border-radius: 10px;
       font-size: 14px;
     }
 
     input[type="file"]::-webkit-file-upload-button {
       background: #0d1424;
-
       color: var(--text);
-
-      border: 1px solid rgba(148,163,184,.25);
+      border: 1px solid rgba(148, 163, 184, 0.25);
       border-radius: 8px;
-
       padding: 6px 8px;
-
       cursor: pointer;
     }
 
     button:hover {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px var(--ring);
-
       cursor: pointer;
     }
 
@@ -438,29 +315,16 @@
     #controls select:focus,
     #controls button:focus {
       outline: none;
-
       border-color: var(--accent);
-
       box-shadow: 0 0 0 3px var(--ring);
     }
 
-    /* =========================
-       FOOTER
-       ========================= */
-
     footer {
       margin-top: 40px;
-
       color: var(--muted);
-
       font-size: 13px;
-
       text-align: center;
     }
-
-    /* =========================
-       MOBILE
-       ========================= */
 
     @media (max-width: 650px) {
       header {
@@ -483,34 +347,21 @@
   </style>
 </head>
 
-
 <body>
 
   <div class="wrap">
 
-    <!-- =========================
-         HEADER
-         ========================= -->
-
     <header>
-
       <div class="brand">
-
         <div>
-
           <h1>James Novosel</h1>
-
           <p class="sub">
             Computing Science student at UTS • Software Development • Sydney, Australia
           </p>
-
         </div>
-
       </div>
 
-
       <nav>
-
         <a href="./">
           Back to Portfolio
         </a>
@@ -522,34 +373,22 @@
         >
           GitHub
         </a>
-
       </nav>
-
     </header>
 
-
-    <!-- =========================
-         PROJECT INTRODUCTION
-         ========================= -->
 
     <section class="project-intro">
 
       <div class="intro-grid">
 
-        <!-- PROJECT IMAGE -->
-
         <div>
-
           <img
             class="project-image"
-            src="demo1.png"
-            alt="K-Means Colour Detection showing an image and its generated colour palette"
+            src="Zeri_0.jpg"
+            alt="Example image used with the K-Means Colour Detection project"
           >
-
         </div>
 
-
-        <!-- PROJECT INFORMATION -->
 
         <div class="project-info">
 
@@ -575,12 +414,10 @@
           </h3>
 
           <div class="tags">
-
             <span class="tag">JavaScript</span>
             <span class="tag">p5.js</span>
             <span class="tag">HTML</span>
             <span class="tag">CSS</span>
-
           </div>
 
 
@@ -589,34 +426,11 @@
           </h3>
 
           <div class="tags">
-
             <span class="tag">K-Means Clustering</span>
             <span class="tag">Image Processing</span>
             <span class="tag">RGB Colour Data</span>
             <span class="tag">Data Sampling</span>
             <span class="tag">Data Visualisation</span>
-
-          </div>
-
-
-          <div class="project-actions">
-
-            <a
-              class="btn primary"
-              href="#demo"
-            >
-              Try the Demo
-            </a>
-
-            <a
-              class="btn"
-              href="https://github.com/sameJ23/K-Means-Colour-Detection"
-              target="_blank"
-              rel="noreferrer"
-            >
-              View on GitHub
-            </a>
-
           </div>
 
         </div>
@@ -626,24 +440,17 @@
     </section>
 
 
-    <!-- =========================
-         DEMO
-         ========================= -->
-
-    <section
-      class="demo-section"
-      id="demo"
-    >
+    <section class="demo-section">
 
       <div class="section-header">
 
         <h2>Interactive Demo</h2>
 
         <p>
-          Upload an image and experiment with the clustering settings
-          below. Increasing the number of clusters produces a larger
-          colour palette, while the quality and iteration controls
-          affect how the image is sampled and processed.
+          Upload an image and experiment with the clustering settings below.
+          Increasing the number of clusters produces a larger colour palette,
+          while the quality and iteration controls affect how the image is
+          sampled and processed.
         </p>
 
       </div>
@@ -652,16 +459,11 @@
       <div class="demo-grid">
 
         <div class="card">
-
           <div id="canvasWrap"></div>
-
         </div>
 
-
         <div class="card">
-
           <div id="controls"></div>
-
         </div>
 
       </div>
@@ -670,19 +472,13 @@
 
 
     <footer>
-
       © <span id="y"></span> James Novosel • Sydney, Australia
-
     </footer>
 
   </div>
 
 
-  <!-- p5.js -->
-
-  <script
-    src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"
-  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
 
 
   <script>
@@ -695,7 +491,6 @@
 
     let sampleArray = [];
     let centroids = [];
-    let compliment = [];
 
     let kSlider;
     let iterSlider;
@@ -714,12 +509,6 @@
       const controlsHost = select('#controls');
       const canvasHost = select('#canvasWrap');
 
-
-      /*
-       * Canvas initially uses a 16:9 ratio
-       * until an image has been uploaded.
-       */
-
       const w = canvasHost.elt.clientWidth || 960;
       const h = Math.round(w * 9 / 16);
 
@@ -729,143 +518,53 @@
       cnv.addClass('p5Canvas');
 
 
-      /*
-       * Creates each labelled control row.
-       */
-
       const row = (labelText, elt) => {
 
-        const wrap =
-          createDiv()
-            .parent(controlsHost);
+        const wrap = createDiv().parent(controlsHost);
 
         wrap.addClass('control');
 
+        const lab = createElement('label', labelText).parent(wrap);
 
-        const lab =
-          createElement(
-            'label',
-            labelText
-          )
-          .parent(wrap);
-
-        lab.style(
-          'min-width',
-          '120px'
-        );
-
-        lab.style(
-          'color',
-          'var(--muted)'
-        );
+        lab.style('min-width', '120px');
+        lab.style('color', 'var(--muted)');
 
         elt.parent(wrap);
 
       };
 
 
-      /*
-       * Number of colour clusters.
-       */
+      kSlider = createSlider(2, 12, k, 1);
+      kSlider.input(scheduleRecompute);
 
-      kSlider =
-        createSlider(
-          2,
-          12,
-          k,
-          1
-        );
-
-      kSlider.input(
-        scheduleRecompute
-      );
-
-      row(
-        'Clusters (k)',
-        kSlider
-      );
+      row('Clusters (k)', kSlider);
 
 
-      /*
-       * K-Means iterations.
-       */
+      iterSlider = createSlider(1, 1000, ITER, 1);
+      iterSlider.input(scheduleRecompute);
 
-      iterSlider =
-        createSlider(
-          1,
-          1000,
-          ITER,
-          1
-        );
-
-      iterSlider.input(
-        scheduleRecompute
-      );
-
-      row(
-        'Iterations',
-        iterSlider
-      );
+      row('Iterations', iterSlider);
 
 
-      /*
-       * Image sampling step.
-       */
+      stepSlider = createSlider(1, 20, STEP, 1);
+      stepSlider.input(scheduleRecompute);
 
-      stepSlider =
-        createSlider(
-          1,
-          20,
-          STEP,
-          1
-        );
-
-      stepSlider.input(
-        scheduleRecompute
-      );
-
-      row(
-        'Quality (STEP)',
-        stepSlider
-      );
+      row('Quality (STEP)', stepSlider);
 
 
-      /*
-       * Image upload.
-       */
+      fileInput = createFileInput(handleFileUpload);
 
-      fileInput =
-        createFileInput(
-          handleFileUpload
-        );
-
-      row(
-        'Image',
-        fileInput
-      );
+      row('Image', fileInput);
 
 
-      /*
-       * Folder upload.
-       */
+      folderInput = createElement('input')
+        .attribute('type', 'file')
+        .attribute('multiple', '')
+        .attribute('webkitdirectory', '');
 
-      folderInput =
-        createElement('input')
-          .attribute('type', 'file')
-          .attribute('multiple', '')
-          .attribute(
-            'webkitdirectory',
-            ''
-          );
+      folderInput.changed(handleFolderUpload);
 
-      folderInput.changed(
-        handleFolderUpload
-      );
-
-      row(
-        'Folder',
-        folderInput
-      );
+      row('Folder', folderInput);
 
 
       noLoop();
@@ -885,51 +584,35 @@
     function scheduleRecompute() {
 
       k = kSlider.value();
-
-      ITER =
-        iterSlider.value();
-
-      STEP =
-        stepSlider.value();
+      ITER = iterSlider.value();
+      STEP = stepSlider.value();
 
 
       if (recomputeTimer) {
-
-        clearTimeout(
-          recomputeTimer
-        );
-
+        clearTimeout(recomputeTimer);
       }
 
 
-      recomputeTimer =
-        setTimeout(
-          recompute,
-          120
-        );
+      recomputeTimer = setTimeout(
+        recompute,
+        120
+      );
 
     }
 
 
     function fitCanvasToHost() {
 
-      const host =
-        document.getElementById(
-          'canvasWrap'
-        );
+      const host = document.getElementById('canvasWrap');
 
-
-      const totalW =
-        host.clientWidth || 960;
+      const totalW = host.clientWidth || 960;
 
 
       if (!img) {
 
         resizeCanvas(
           totalW,
-          Math.round(
-            totalW * 9 / 16
-          )
+          Math.round(totalW * 9 / 16)
         );
 
         return;
@@ -937,31 +620,24 @@
       }
 
 
-      const stripW =
-        clamp(
-          Math.round(
-            totalW * 0.18
-          ),
-          120,
-          260
-        );
+      const stripW = clamp(
+        Math.round(totalW * 0.18),
+        120,
+        260
+      );
 
 
-      const imgTargetW =
-        Math.max(
-          1,
-          totalW - stripW
-        );
+      const imgTargetW = Math.max(
+        1,
+        totalW - stripW
+      );
 
 
-      const scale =
-        imgTargetW / img.width;
+      const scale = imgTargetW / img.width;
 
-
-      const imgH =
-        Math.round(
-          img.height * scale
-        );
+      const imgH = Math.round(
+        img.height * scale
+      );
 
 
       resizeCanvas(
@@ -976,10 +652,7 @@
 
       return Math.max(
         lo,
-        Math.min(
-          hi,
-          v
-        )
+        Math.min(hi, v)
       );
 
     }
@@ -990,37 +663,25 @@
       if (!img) return;
 
 
-      const totalW =
-        width;
+      const totalW = width;
 
 
-      const stripW =
-        clamp(
-          Math.round(
-            totalW * 0.18
-          ),
-          120,
-          260
-        );
+      const stripW = clamp(
+        Math.round(totalW * 0.18),
+        120,
+        260
+      );
 
 
-      const imgW =
-        totalW - stripW;
+      const imgW = totalW - stripW;
 
 
-      const scale =
-        imgW / img.width;
+      const scale = imgW / img.width;
 
+      const imgH = Math.round(
+        img.height * scale
+      );
 
-      const imgH =
-        Math.round(
-          img.height * scale
-        );
-
-
-      /*
-       * Draw uploaded image.
-       */
 
       image(
         img,
@@ -1031,18 +692,9 @@
       );
 
 
-      /*
-       * Draw generated palette.
-       */
-
-      const stripX =
-        imgW;
-
-      const stripY =
-        0;
-
-      const stripH =
-        imgH;
+      const stripX = imgW;
+      const stripY = 0;
+      const stripH = imgH;
 
 
       showPalette(
@@ -1070,11 +722,10 @@
       );
 
 
-      centroids =
-        kmeans(
-          ITER,
-          k
-        );
+      centroids = kmeans(
+        ITER,
+        k
+      );
 
 
       fitCanvasToHost();
@@ -1104,11 +755,10 @@
 
           },
 
-          (err) =>
-            console.error(
-              'Image load failed:',
-              err
-            )
+          (err) => console.error(
+            'Image load failed:',
+            err
+          )
 
         );
 
@@ -1119,25 +769,19 @@
 
     function handleFolderUpload() {
 
-      const files =
-        Array.from(
-          this.elt.files
-        )
-        .filter(
-          file =>
-            file.type.startsWith(
-              'image/'
-            )
-        );
+      const files = Array.from(
+        this.elt.files
+      ).filter(
+        file => file.type.startsWith('image/')
+      );
 
 
       if (!files.length) return;
 
 
-      const url =
-        URL.createObjectURL(
-          files[0]
-        );
+      const url = URL.createObjectURL(
+        files[0]
+      );
 
 
       loadImage(
@@ -1150,17 +794,14 @@
 
           recompute();
 
-          URL.revokeObjectURL(
-            url
-          );
+          URL.revokeObjectURL(url);
 
         },
 
-        (err) =>
-          console.error(
-            'Folder image load failed:',
-            err
-          )
+        (err) => console.error(
+          'Folder image load failed:',
+          err
+        )
 
       );
 
@@ -1185,19 +826,12 @@
         ) {
 
           let index =
-            (
-              i * img.width + j
-            ) * 4;
+            (i * img.width + j) * 4;
 
 
-          let r =
-            img.pixels[index];
-
-          let g =
-            img.pixels[index + 1];
-
-          let b =
-            img.pixels[index + 2];
+          let r = img.pixels[index];
+          let g = img.pixels[index + 1];
+          let b = img.pixels[index + 2];
 
 
           sampleArray.push(
@@ -1216,18 +850,13 @@
       let topColours = [];
 
 
-      /*
-       * Select initial centroids.
-       */
-
       for (
         let y = 0;
         y < k;
         y++
       ) {
 
-        let randColour =
-          random(sampleArray);
+        let randColour = random(sampleArray);
 
 
         while (
@@ -1237,8 +866,7 @@
           )
         ) {
 
-          randColour =
-            random(sampleArray);
+          randColour = random(sampleArray);
 
         }
 
@@ -1249,12 +877,6 @@
 
       }
 
-
-      /*
-       * Repeatedly assign pixels to the
-       * closest centroid and recalculate
-       * cluster centres.
-       */
 
       for (
         let x = 0;
@@ -1273,12 +895,10 @@
 
           let bestDistancePos = 0;
 
-
-          let bestDistance =
-            distance(
-              sampleArray[z],
-              topColours[0]
-            );
+          let bestDistance = distance(
+            sampleArray[z],
+            topColours[0]
+          );
 
 
           for (
@@ -1287,11 +907,10 @@
             c++
           ) {
 
-            const currentDistance =
-              distance(
-                sampleArray[z],
-                topColours[c]
-              );
+            const currentDistance = distance(
+              sampleArray[z],
+              topColours[c]
+            );
 
 
             if (
@@ -1299,8 +918,7 @@
               bestDistance
             ) {
 
-              bestDistance =
-                currentDistance;
+              bestDistance = currentDistance;
 
               bestDistancePos = c;
 
@@ -1316,16 +934,13 @@
         }
 
 
-        const sums =
-          Array.from(
-            { length: k },
-            () => [0, 0, 0]
-          );
+        const sums = Array.from(
+          { length: k },
+          () => [0, 0, 0]
+        );
 
 
-        const counts =
-          new Array(k)
-            .fill(0);
+        const counts = new Array(k).fill(0);
 
 
         for (
@@ -1334,19 +949,12 @@
           i++
         ) {
 
-          const cid =
-            closest[i];
+          const cid = closest[i];
 
 
-          sums[cid][0] +=
-            sampleArray[i][0];
-
-          sums[cid][1] +=
-            sampleArray[i][1];
-
-          sums[cid][2] +=
-            sampleArray[i][2];
-
+          sums[cid][0] += sampleArray[i][0];
+          sums[cid][1] += sampleArray[i][1];
+          sums[cid][2] += sampleArray[i][2];
 
           counts[cid]++;
 
@@ -1365,27 +973,17 @@
 
             topColours[j] = [
 
-              sums[j][0] /
-              counts[j],
-
-              sums[j][1] /
-              counts[j],
-
-              sums[j][2] /
-              counts[j]
+              sums[j][0] / counts[j],
+              sums[j][1] / counts[j],
+              sums[j][2] / counts[j]
 
             ];
 
-          }
+          } else {
 
-          else {
-
-            topColours[j] =
-              [
-                ...random(
-                  sampleArray
-                )
-              ];
+            topColours[j] = [
+              ...random(sampleArray)
+            ];
 
           }
 
@@ -1409,21 +1007,10 @@
 
     function distance(a, b) {
 
-      let dr =
-        a[0] - b[0];
+      let dr = a[0] - b[0];
+      let dg = a[1] - b[1];
+      let db = a[2] - b[2];
 
-      let dg =
-        a[1] - b[1];
-
-      let db =
-        a[2] - b[2];
-
-
-      /*
-       * Squared Euclidean distance.
-       * Square root is unnecessary when
-       * only comparing distances.
-       */
 
       return (
         dr * dr +
@@ -1445,10 +1032,7 @@
     }
 
 
-    function containsColour(
-      list,
-      colour
-    ) {
+    function containsColour(list, colour) {
 
       return list.some(
         currentColour =>
@@ -1473,32 +1057,19 @@
         !cols ||
         !cols.length
       ) {
-
         return;
-
       }
 
 
-      /*
-       * Sort colours by perceived
-       * luminance.
-       */
-
-      const sorted =
-        [...cols].sort(
-          (a, b) =>
-            luminanceRGB(b) -
-            luminanceRGB(a)
-        );
+      const sorted = [...cols].sort(
+        (a, b) =>
+          luminanceRGB(b) -
+          luminanceRGB(a)
+      );
 
 
       noStroke();
 
-
-      /*
-       * Draw smooth gradients between
-       * neighbouring colours.
-       */
 
       for (
         let c = 0;
@@ -1512,28 +1083,25 @@
           p += 0.01
         ) {
 
-          const c1 =
-            color(
-              sorted[c][0],
-              sorted[c][1],
-              sorted[c][2]
-            );
+          const c1 = color(
+            sorted[c][0],
+            sorted[c][1],
+            sorted[c][2]
+          );
 
 
-          const c2 =
-            color(
-              sorted[c + 1][0],
-              sorted[c + 1][1],
-              sorted[c + 1][2]
-            );
+          const c2 = color(
+            sorted[c + 1][0],
+            sorted[c + 1][1],
+            sorted[c + 1][2]
+          );
 
 
-          const mid =
-            lerpColor(
-              c1,
-              c2,
-              p
-            );
+          const mid = lerpColor(
+            c1,
+            c2,
+            p
+          );
 
 
           fill(mid);
@@ -1562,12 +1130,7 @@
       }
 
 
-      /*
-       * Draw solid palette swatches.
-       */
-
-      const cellH =
-        h / sorted.length;
+      const cellH = h / sorted.length;
 
 
       for (
@@ -1606,17 +1169,10 @@
     }
 
 
-    /*
-     * Automatically update footer year.
-     */
-
-    document.getElementById(
-      'y'
-    ).textContent =
+    document.getElementById('y').textContent =
       new Date().getFullYear();
 
   </script>
 
 </body>
-
 </html>
