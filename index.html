@@ -1,420 +1,1622 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>K-Means Palette — James</title>
 
-  
+  <title>K-Means Colour Detection | James Novosel</title>
+
   <style>
-    :root{
-      --bg:#0f172a;        
-      --panel:#111827;    
-      --text:#e5e7eb;      
-      --muted:#94a3b8;     
-      --accent:#60a5fa;    
-      --card:#0b1220;     
-      --border:rgba(148,163,184,.12);
-      --ring: color-mix(in srgb, var(--accent) 40%, transparent);
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --accent: #60a5fa;
+      --card: #0b1220;
+      --border: rgba(148,163,184,.12);
+      --ring: rgba(96,165,250,.4);
     }
-    .wrap {
-      max-width: none;
-      width: 100%;
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
       margin: 0;
-      padding: 0;
+
+      font-family:
+        system-ui,
+        -apple-system,
+        Segoe UI,
+        Roboto,
+        Ubuntu,
+        Cantarell,
+        Noto Sans,
+        "Helvetica Neue",
+        Arial;
+
+      background:
+        radial-gradient(
+          1200px 600px at 10% 0%,
+          rgba(96,165,250,.08),
+          transparent 60%
+        ),
+        radial-gradient(
+          900px 500px at 90% 10%,
+          rgba(16,185,129,.08),
+          transparent 60%
+        ),
+        var(--bg);
+
+      color: var(--text);
     }
-    
-    .grid {
-      grid-template-columns: 3fr 1fr;
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 20px 72px;
     }
-    
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 16px;
+
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(22px, 3vw, 28px);
+    }
+
+    header .sub {
+      margin: 6px 0 0;
+
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    header nav {
+      display: flex;
+      gap: 16px;
+    }
+
+    header nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    header nav a:hover {
+      color: var(--text);
+    }
+
+    /* =========================
+       PROJECT INTRODUCTION
+       ========================= */
+
+    .project-intro {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.02),
+          rgba(255,255,255,0)
+        ),
+        var(--card);
+
+      border: 1px solid var(--border);
+      border-radius: 18px;
+
+      padding: 24px;
+    }
+
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    @media (min-width: 800px) {
+      .intro-grid {
+        grid-template-columns: 1.15fr 1fr;
+      }
+    }
+
+    .project-image {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+
+      object-fit: cover;
+
+      display: block;
+
+      background: #0a0f1c;
+
+      border: 1px solid rgba(148,163,184,.14);
+      border-radius: 12px;
+    }
+
+    .project-info h2 {
+      margin: 0 0 10px;
+
+      font-size: clamp(26px, 4vw, 36px);
+    }
+
+    .project-description {
+      margin: 0;
+
+      color: var(--muted);
+
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .info-heading {
+      margin: 22px 0 10px;
+
+      color: var(--text);
+
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+
+      gap: 8px;
+    }
+
+    .tag {
+      color: var(--accent);
+
+      background: rgba(96,165,250,.10);
+
+      border: 1px solid rgba(96,165,250,.25);
+      border-radius: 999px;
+
+      padding: 6px 10px;
+
+      font-size: 12px;
+    }
+
+    .project-actions {
+      display: flex;
+      flex-wrap: wrap;
+
+      gap: 10px;
+
+      margin-top: 22px;
+    }
+
+    .btn {
+      display: inline-block;
+
+      background: #0d1424;
+
+      color: var(--text);
+
+      border: 1px solid rgba(148,163,184,.2);
+      border-radius: 10px;
+
+      padding: 10px 14px;
+
+      text-decoration: none;
+
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+
+    .btn.primary {
+      background:
+        linear-gradient(
+          135deg,
+          rgba(96,165,250,.15),
+          rgba(52,211,153,.15)
+        );
+
+      border-color: rgba(96,165,250,.35);
+    }
+
+    /* =========================
+       DEMO SECTION
+       ========================= */
+
+    .demo-section {
+      margin-top: 42px;
+    }
+
+    .section-header {
+      margin-bottom: 18px;
+    }
+
+    .section-header h2 {
+      margin: 0 0 8px;
+
+      font-size: clamp(22px, 3vw, 28px);
+    }
+
+    .section-header p {
+      margin: 0;
+
+      max-width: 760px;
+
+      color: var(--muted);
+
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+
+      gap: 18px;
+    }
+
+    @media (min-width: 900px) {
+      .demo-grid {
+        grid-template-columns: 2fr 1fr;
+      }
+    }
+
+    .card {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.02),
+          rgba(255,255,255,0)
+        ),
+        var(--card);
+
+      border: 1px solid var(--border);
+      border-radius: 16px;
+
+      padding: 16px;
+    }
+
+    /* =========================
+       P5 DEMO
+       ========================= */
+
     #canvasWrap {
       width: 100%;
+
+      display: grid;
+      place-items: center;
+
+      background: #0a0f1c;
+
+      border: 1px solid rgba(148,163,184,.14);
+      border-radius: 12px;
+
+      overflow: hidden;
     }
-    
+
     canvas.p5Canvas {
       width: 100%;
       height: auto;
+
+      display: block;
+
+      border-radius: 12px;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica Neue,Arial;
-      background:
-        radial-gradient(1200px 600px at 10% 0%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
-        radial-gradient(900px 500px at 90% 10%, rgba(16,185,129,.08), transparent 60%),
-        var(--bg);
-      color:var(--text);
-      padding:28px 16px 48px;
-    }
-    .wrap{max-width:1100px;margin:0 auto}
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-    header .brand{display:flex;align-items:center;gap:12px}
-    header .avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#34d399);box-shadow:0 0 0 3px var(--ring)}
-    header h1{margin:0;font-size:18px}
-    header .sub{margin:2px 0 0;color:var(--muted);font-size:12px}
-    header nav a{color:var(--muted);text-decoration:none;font-size:14px;margin-left:12px}
-    header nav a:hover{color:var(--text)}
+    #controls {
+      display: flex;
+      flex-direction: column;
 
-    .grid{display:grid;gap:18px;grid-template-columns:1fr}
-    @media (min-width:900px){ .grid{grid-template-columns:2fr 1fr} }
-
-    .card{
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0)),var(--card);
-      border:1px solid var(--border);
-      border-radius:16px;
-      padding:16px;
+      gap: 12px;
     }
 
-    
-    #canvasWrap{
-      display:grid;place-items:center;
-      background:#0a0f1c;border:1px solid rgba(148,163,184,.14);
-      border-radius:12px;overflow:hidden;
-      
-    }
-    canvas.p5Canvas{border-radius:12px;display:block;max-width:100%;height:auto}
+    .control {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
 
-    
-    #controls{display:flex;flex-direction:column;gap:12px}
-    .control{
-      display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-      background:#0d1424;border:1px solid rgba(148,163,184,.16);
-      border-radius:12px;padding:12px;
-    }
-    .control label{min-width:120px;color:var(--muted);font-size:13px}
+      gap: 10px;
 
-    
-    input[type="range"]{
-      width:220px;appearance:none;height:4px;border-radius:999px;outline:none;
-      background: color-mix(in srgb, var(--accent) 25%, rgba(148,163,184,.25));
-    }
-    input[type="range"]::-webkit-slider-thumb{
-      -webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;
-      background:var(--accent);border:2px solid #000;box-shadow:0 0 0 3px var(--ring);cursor:pointer;
-    }
-    input[type="file"], input[type="number"], select, button{
-      background:#0d1424;border:1px solid rgba(148,163,184,.25);color:var(--text);
-      padding:8px 10px;border-radius:10px;font-size:14px;
-    }
-    button:hover{border-color:var(--accent);box-shadow:0 0 0 3px var(--ring);cursor:pointer}
+      background: #0d1424;
 
-    
-    #controls, #controls * { background-color: transparent; }
-    input[type="file"]::-webkit-file-upload-button{
-      background:#0d1424;color:var(--text);border:1px solid rgba(148,163,184,.25)
+      border: 1px solid rgba(148,163,184,.16);
+      border-radius: 12px;
+
+      padding: 12px;
     }
-    #controls input:focus, #controls select:focus, #controls button:focus{
-      outline:none; box-shadow:0 0 0 3px var(--ring); border-color:var(--accent)
+
+    .control label {
+      min-width: 120px;
+
+      color: var(--muted);
+
+      font-size: 13px;
     }
+
     input[type="range"] {
       width: 220px;
       height: 4px;
+
       appearance: none;
+
       border-radius: 999px;
+
       outline: none;
-      background: linear-gradient(to right, var(--accent) 0%, var(--accent) var(--value, 0%), rgba(148,163,184,.25) var(--value, 0%), rgba(148,163,184,.25) 100%);
+
+      background:
+        linear-gradient(
+          to right,
+          var(--accent) 0%,
+          var(--accent) var(--value, 0%),
+          rgba(148,163,184,.25) var(--value, 0%),
+          rgba(148,163,184,.25) 100%
+        );
     }
-    
-    
+
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
+
       width: 16px;
       height: 16px;
+
       border-radius: 50%;
+
       background: var(--accent);
       border: 2px solid #000;
+
       box-shadow: 0 0 0 3px var(--ring);
+
       cursor: pointer;
     }
-    
-</style>
+
+    input[type="file"],
+    input[type="number"],
+    select,
+    button {
+      background: #0d1424;
+
+      border: 1px solid rgba(148,163,184,.25);
+      border-radius: 10px;
+
+      color: var(--text);
+
+      padding: 8px 10px;
+
+      font-size: 14px;
+    }
+
+    input[type="file"]::-webkit-file-upload-button {
+      background: #0d1424;
+
+      color: var(--text);
+
+      border: 1px solid rgba(148,163,184,.25);
+      border-radius: 8px;
+
+      padding: 6px 8px;
+
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--ring);
+
+      cursor: pointer;
+    }
+
+    #controls input:focus,
+    #controls select:focus,
+    #controls button:focus {
+      outline: none;
+
+      border-color: var(--accent);
+
+      box-shadow: 0 0 0 3px var(--ring);
+    }
+
+    /* =========================
+       FOOTER
+       ========================= */
+
+    footer {
+      margin-top: 40px;
+
+      color: var(--muted);
+
+      font-size: 13px;
+
+      text-align: center;
+    }
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media (max-width: 650px) {
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      header nav {
+        gap: 14px;
+      }
+
+      input[type="range"] {
+        width: 100%;
+      }
+
+      .control label {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
+
 <body>
+
   <div class="wrap">
+
+    <!-- =========================
+         HEADER
+         ========================= -->
+
     <header>
+
       <div class="brand">
-        <div class="avatar" aria-hidden="true"></div>
+
         <div>
+
           <h1>James Novosel</h1>
-          <p class="sub">K-Means Palette visualiser</p>
+
+          <p class="sub">
+            Computing Science student at UTS • Software Development • Sydney, Australia
+          </p>
+
         </div>
+
       </div>
+
+
       <nav>
-        <a href="./">Back to portfolio</a>
-        <a href="https://github.com/sameJ23/K-Means-Colour-Detection" target="_blank" rel="noreferrer">Source</a>
+
+        <a href="./">
+          Back to Portfolio
+        </a>
+
+        <a
+          href="https://github.com/sameJ23/K-Means-Colour-Detection"
+          target="_blank"
+          rel="noreferrer"
+        >
+          GitHub
+        </a>
+
       </nav>
+
     </header>
 
-    <div class="grid">
-      <div class="card">
-        <div id="canvasWrap"></div>
+
+    <!-- =========================
+         PROJECT INTRODUCTION
+         ========================= -->
+
+    <section class="project-intro">
+
+      <div class="intro-grid">
+
+        <!-- PROJECT IMAGE -->
+
+        <div>
+
+          <img
+            class="project-image"
+            src="demo1.png"
+            alt="K-Means Colour Detection showing an image and its generated colour palette"
+          >
+
+        </div>
+
+
+        <!-- PROJECT INFORMATION -->
+
+        <div class="project-info">
+
+          <h2>K-Means Colour Detection</h2>
+
+          <p class="project-description">
+            K-Means Colour Detection is an interactive image processing
+            project that identifies the dominant colours within an image
+            using K-Means clustering.
+
+            Users can upload their own image and adjust the number of
+            colour clusters, iterations and sampling quality. The image
+            is sampled as RGB colour data before the K-Means algorithm
+            groups similar colours together.
+
+            The resulting cluster centres are then displayed as a colour
+            palette alongside the original image.
+          </p>
+
+
+          <h3 class="info-heading">
+            Languages & Libraries
+          </h3>
+
+          <div class="tags">
+
+            <span class="tag">JavaScript</span>
+            <span class="tag">p5.js</span>
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+
+          </div>
+
+
+          <h3 class="info-heading">
+            Key Topics
+          </h3>
+
+          <div class="tags">
+
+            <span class="tag">K-Means Clustering</span>
+            <span class="tag">Image Processing</span>
+            <span class="tag">RGB Colour Data</span>
+            <span class="tag">Data Sampling</span>
+            <span class="tag">Data Visualisation</span>
+
+          </div>
+
+
+          <div class="project-actions">
+
+            <a
+              class="btn primary"
+              href="#demo"
+            >
+              Try the Demo
+            </a>
+
+            <a
+              class="btn"
+              href="https://github.com/sameJ23/K-Means-Colour-Detection"
+              target="_blank"
+              rel="noreferrer"
+            >
+              View on GitHub
+            </a>
+
+          </div>
+
+        </div>
+
       </div>
-      <div class="card">
-        <div id="controls"></div>
+
+    </section>
+
+
+    <!-- =========================
+         DEMO
+         ========================= -->
+
+    <section
+      class="demo-section"
+      id="demo"
+    >
+
+      <div class="section-header">
+
+        <h2>Interactive Demo</h2>
+
+        <p>
+          Upload an image and experiment with the clustering settings
+          below. Increasing the number of clusters produces a larger
+          colour palette, while the quality and iteration controls
+          affect how the image is sampled and processed.
+        </p>
+
       </div>
-    </div>
+
+
+      <div class="demo-grid">
+
+        <div class="card">
+
+          <div id="canvasWrap"></div>
+
+        </div>
+
+
+        <div class="card">
+
+          <div id="controls"></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <footer>
+
+      © <span id="y"></span> James Novosel • Sydney, Australia
+
+    </footer>
+
   </div>
 
- 
-  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
 
-  
+  <!-- p5.js -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"
+  ></script>
+
+
   <script>
-    
+
     let k = 5;
     let STEP = 5;
     let ITER = 200;
+
     let img;
+
     let sampleArray = [];
     let centroids = [];
     let compliment = [];
 
-   
-    let kSlider, iterSlider, stepSlider;
-    let fileInput;            
-    let folderInput;          
+    let kSlider;
+    let iterSlider;
+    let stepSlider;
+
+    let fileInput;
+    let folderInput;
+
     let recomputeTimer;
 
+
     function setup() {
+
       noStroke();
 
       const controlsHost = select('#controls');
       const canvasHost = select('#canvasWrap');
 
-      // Canvas: fit container width initially (16:9 until an image loads)
+
+      /*
+       * Canvas initially uses a 16:9 ratio
+       * until an image has been uploaded.
+       */
+
       const w = canvasHost.elt.clientWidth || 960;
-      const h = Math.round(w * 9/16);
+      const h = Math.round(w * 9 / 16);
+
       const cnv = createCanvas(w, h);
+
       cnv.parent('canvasWrap');
       cnv.addClass('p5Canvas');
 
-      // Helper to make labeled rows that match the card UI
+
+      /*
+       * Creates each labelled control row.
+       */
+
       const row = (labelText, elt) => {
-        const wrap = createDiv().parent(controlsHost);
+
+        const wrap =
+          createDiv()
+            .parent(controlsHost);
+
         wrap.addClass('control');
-        const lab = createElement('label', labelText).parent(wrap);
-        lab.style('min-width','120px');
-        lab.style('color','var(--muted)');
+
+
+        const lab =
+          createElement(
+            'label',
+            labelText
+          )
+          .parent(wrap);
+
+        lab.style(
+          'min-width',
+          '120px'
+        );
+
+        lab.style(
+          'color',
+          'var(--muted)'
+        );
+
         elt.parent(wrap);
+
       };
 
-      
-      kSlider = createSlider(2, 12, k, 1);
-      kSlider.input(scheduleRecompute);
-      row('Clusters (k)', kSlider);
 
-      iterSlider = createSlider(1, 1000, ITER, 1);
-      iterSlider.input(scheduleRecompute);
-      row('Iterations', iterSlider);
+      /*
+       * Number of colour clusters.
+       */
 
-      stepSlider = createSlider(1, 20, STEP, 1);
-      stepSlider.input(scheduleRecompute);
-      row('Quality (STEP)', stepSlider);
+      kSlider =
+        createSlider(
+          2,
+          12,
+          k,
+          1
+        );
 
-      // File inputs
-      fileInput = createFileInput(handleFileUpload);
-      row('Image', fileInput);
+      kSlider.input(
+        scheduleRecompute
+      );
 
-      folderInput = createElement('input').attribute('type','file').attribute('multiple','').attribute('webkitdirectory','');
-      folderInput.changed(handleFolderUpload);
-      row('Folder', folderInput);
+      row(
+        'Clusters (k)',
+        kSlider
+      );
 
-      noLoop(); 
+
+      /*
+       * K-Means iterations.
+       */
+
+      iterSlider =
+        createSlider(
+          1,
+          1000,
+          ITER,
+          1
+        );
+
+      iterSlider.input(
+        scheduleRecompute
+      );
+
+      row(
+        'Iterations',
+        iterSlider
+      );
+
+
+      /*
+       * Image sampling step.
+       */
+
+      stepSlider =
+        createSlider(
+          1,
+          20,
+          STEP,
+          1
+        );
+
+      stepSlider.input(
+        scheduleRecompute
+      );
+
+      row(
+        'Quality (STEP)',
+        stepSlider
+      );
+
+
+      /*
+       * Image upload.
+       */
+
+      fileInput =
+        createFileInput(
+          handleFileUpload
+        );
+
+      row(
+        'Image',
+        fileInput
+      );
+
+
+      /*
+       * Folder upload.
+       */
+
+      folderInput =
+        createElement('input')
+          .attribute('type', 'file')
+          .attribute('multiple', '')
+          .attribute(
+            'webkitdirectory',
+            ''
+          );
+
+      folderInput.changed(
+        handleFolderUpload
+      );
+
+      row(
+        'Folder',
+        folderInput
+      );
+
+
+      noLoop();
+
     }
 
-    function windowResized(){
+
+    function windowResized() {
+
       fitCanvasToHost();
+
       redraw();
+
     }
 
-  
-    function scheduleRecompute(){
+
+    function scheduleRecompute() {
+
       k = kSlider.value();
-      ITER = iterSlider.value();
-      STEP = stepSlider.value();
-      if (recomputeTimer) clearTimeout(recomputeTimer);
-      recomputeTimer = setTimeout(recompute, 120);
-    }
 
-   
-    function fitCanvasToHost(){
-      const host = document.getElementById('canvasWrap');
-      const totalW = host.clientWidth || 960;
+      ITER =
+        iterSlider.value();
 
-      if (!img){
-        resizeCanvas(totalW, Math.round(totalW * 9/16));
-        return;
+      STEP =
+        stepSlider.value();
+
+
+      if (recomputeTimer) {
+
+        clearTimeout(
+          recomputeTimer
+        );
+
       }
 
-      const stripW = clamp(Math.round(totalW * 0.18), 120, 260); // palette slice
-      const imgTargetW = Math.max(1, totalW - stripW);
-      const scale = imgTargetW / img.width;
-      const imgH = Math.round(img.height * scale);
 
-      resizeCanvas(totalW, imgH);
+      recomputeTimer =
+        setTimeout(
+          recompute,
+          120
+        );
+
     }
 
-    function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
 
-    // === Core flow ===
+    function fitCanvasToHost() {
+
+      const host =
+        document.getElementById(
+          'canvasWrap'
+        );
+
+
+      const totalW =
+        host.clientWidth || 960;
+
+
+      if (!img) {
+
+        resizeCanvas(
+          totalW,
+          Math.round(
+            totalW * 9 / 16
+          )
+        );
+
+        return;
+
+      }
+
+
+      const stripW =
+        clamp(
+          Math.round(
+            totalW * 0.18
+          ),
+          120,
+          260
+        );
+
+
+      const imgTargetW =
+        Math.max(
+          1,
+          totalW - stripW
+        );
+
+
+      const scale =
+        imgTargetW / img.width;
+
+
+      const imgH =
+        Math.round(
+          img.height * scale
+        );
+
+
+      resizeCanvas(
+        totalW,
+        imgH
+      );
+
+    }
+
+
+    function clamp(v, lo, hi) {
+
+      return Math.max(
+        lo,
+        Math.min(
+          hi,
+          v
+        )
+      );
+
+    }
+
+
     function draw() {
+
       if (!img) return;
 
-      const totalW = width;
-      const stripW = clamp(Math.round(totalW * 0.18), 120, 260);
-      const imgW = totalW - stripW;
 
-      // Scale image to the imgW region; canvas height already matches via fitCanvasToHost
-      const scale = imgW / img.width;
-      const imgH = Math.round(img.height * scale);
+      const totalW =
+        width;
 
-      // Draw image on the left
-      image(img, 0, 0, imgW, imgH);
 
-      // Draw palette strip on the right
-      const stripX = imgW;
-      const stripY = 0;
-      const stripH = imgH;
+      const stripW =
+        clamp(
+          Math.round(
+            totalW * 0.18
+          ),
+          120,
+          260
+        );
 
-      showPalette(centroids, stripX, stripY, stripW, stripH);
+
+      const imgW =
+        totalW - stripW;
+
+
+      const scale =
+        imgW / img.width;
+
+
+      const imgH =
+        Math.round(
+          img.height * scale
+        );
+
+
+      /*
+       * Draw uploaded image.
+       */
+
+      image(
+        img,
+        0,
+        0,
+        imgW,
+        imgH
+      );
+
+
+      /*
+       * Draw generated palette.
+       */
+
+      const stripX =
+        imgW;
+
+      const stripY =
+        0;
+
+      const stripH =
+        imgH;
+
+
+      showPalette(
+        centroids,
+        stripX,
+        stripY,
+        stripW,
+        stripH
+      );
+
     }
+
 
     function recompute() {
+
       if (!img) return;
+
+
       sampleArray.length = 0;
-      sample(img, STEP);             // YOUR sampler
-      centroids = kmeans(ITER, k);   // YOUR k-means
+
+
+      sample(
+        img,
+        STEP
+      );
+
+
+      centroids =
+        kmeans(
+          ITER,
+          k
+        );
+
+
       fitCanvasToHost();
+
       redraw();
+
     }
 
-    // === Upload handlers ===
+
     function handleFileUpload(file) {
-      if (file && file.type && file.type.startsWith('image')) {
-        loadImage(file.data, (loaded) => {
-          img = loaded;
-          recompute();
-        }, (err) => console.error('Image load failed:', err));
+
+      if (
+        file &&
+        file.type &&
+        file.type.startsWith('image')
+      ) {
+
+        loadImage(
+
+          file.data,
+
+          (loaded) => {
+
+            img = loaded;
+
+            recompute();
+
+          },
+
+          (err) =>
+            console.error(
+              'Image load failed:',
+              err
+            )
+
+        );
+
       }
+
     }
+
 
     function handleFolderUpload() {
-      const files = Array.from(this.elt.files).filter(f => f.type.startsWith('image/'));
+
+      const files =
+        Array.from(
+          this.elt.files
+        )
+        .filter(
+          file =>
+            file.type.startsWith(
+              'image/'
+            )
+        );
+
+
       if (!files.length) return;
-      const url = URL.createObjectURL(files[0]);
-      loadImage(url, (loaded) => {
-        img = loaded;
-        recompute();
-        URL.revokeObjectURL(url);
-      }, (err) => console.error('Folder image load failed:', err));
+
+
+      const url =
+        URL.createObjectURL(
+          files[0]
+        );
+
+
+      loadImage(
+
+        url,
+
+        (loaded) => {
+
+          img = loaded;
+
+          recompute();
+
+          URL.revokeObjectURL(
+            url
+          );
+
+        },
+
+        (err) =>
+          console.error(
+            'Folder image load failed:',
+            err
+          )
+
+      );
+
     }
 
-    function sample(img, step){
-      img.loadPixels()
-      for (let i = 0; i < img.height; i += step){
-        for (let j = 0; j < img.width; j += step){
-          let index = (i * img.width + j) * 4;
-          let r = img.pixels[index];
-          let g = img.pixels[index + 1];
-          let b = img.pixels[index + 2];
-          sampleArray.push([r,g,b]);
+
+    function sample(img, step) {
+
+      img.loadPixels();
+
+
+      for (
+        let i = 0;
+        i < img.height;
+        i += step
+      ) {
+
+        for (
+          let j = 0;
+          j < img.width;
+          j += step
+        ) {
+
+          let index =
+            (
+              i * img.width + j
+            ) * 4;
+
+
+          let r =
+            img.pixels[index];
+
+          let g =
+            img.pixels[index + 1];
+
+          let b =
+            img.pixels[index + 2];
+
+
+          sampleArray.push(
+            [r, g, b]
+          );
+
         }
+
       }
+
     }
 
-    function kmeans(iter, k, img) {
+
+    function kmeans(iter, k) {
+
       let topColours = [];
-      for (let y = 0; y < k; y++){
-        let randColour = random(sampleArray)
-        while(containsColour(topColours,randColour)){
-          randColour = random(sampleArray)
+
+
+      /*
+       * Select initial centroids.
+       */
+
+      for (
+        let y = 0;
+        y < k;
+        y++
+      ) {
+
+        let randColour =
+          random(sampleArray);
+
+
+        while (
+          containsColour(
+            topColours,
+            randColour
+          )
+        ) {
+
+          randColour =
+            random(sampleArray);
+
         }
-        topColours.push([...randColour])
+
+
+        topColours.push(
+          [...randColour]
+        );
+
       }
-      for (let x = 0; x < iter; x++){
+
+
+      /*
+       * Repeatedly assign pixels to the
+       * closest centroid and recalculate
+       * cluster centres.
+       */
+
+      for (
+        let x = 0;
+        x < iter;
+        x++
+      ) {
+
         const closest = [];
-        for (let z = 0; z < sampleArray.length; z++){
-          let bestDistancePos= 0;
-          let bestDistance = distance(sampleArray[z], topColours[0]);
-          for (let c = 1; c < topColours.length; c++){
-            if (distance(sampleArray[z], topColours[c]) < bestDistance){
-              bestDistance = distance(sampleArray[z], topColours[c]);
+
+
+        for (
+          let z = 0;
+          z < sampleArray.length;
+          z++
+        ) {
+
+          let bestDistancePos = 0;
+
+
+          let bestDistance =
+            distance(
+              sampleArray[z],
+              topColours[0]
+            );
+
+
+          for (
+            let c = 1;
+            c < topColours.length;
+            c++
+          ) {
+
+            const currentDistance =
+              distance(
+                sampleArray[z],
+                topColours[c]
+              );
+
+
+            if (
+              currentDistance <
+              bestDistance
+            ) {
+
+              bestDistance =
+                currentDistance;
+
               bestDistancePos = c;
+
             }
+
           }
-          closest.push(bestDistancePos);
+
+
+          closest.push(
+            bestDistancePos
+          );
+
         }
-        const sums = Array.from({ length: k }, () => [0, 0, 0]);
-        const counts = new Array(k).fill(0);
-        for (let i = 0; i < sampleArray.length; i++){
-          const cid = closest[i];
-          sums[cid][0] += sampleArray[i][0];
-          sums[cid][1] += sampleArray[i][1];
-          sums[cid][2] += sampleArray[i][2];
+
+
+        const sums =
+          Array.from(
+            { length: k },
+            () => [0, 0, 0]
+          );
+
+
+        const counts =
+          new Array(k)
+            .fill(0);
+
+
+        for (
+          let i = 0;
+          i < sampleArray.length;
+          i++
+        ) {
+
+          const cid =
+            closest[i];
+
+
+          sums[cid][0] +=
+            sampleArray[i][0];
+
+          sums[cid][1] +=
+            sampleArray[i][1];
+
+          sums[cid][2] +=
+            sampleArray[i][2];
+
+
           counts[cid]++;
+
         }
-        for (let j = 0; j < k; j++) {
-          if (counts[j] > 0) {
+
+
+        for (
+          let j = 0;
+          j < k;
+          j++
+        ) {
+
+          if (
+            counts[j] > 0
+          ) {
+
             topColours[j] = [
-              sums[j][0] / counts[j],
-              sums[j][1] / counts[j],
-              sums[j][2] / counts[j]
+
+              sums[j][0] /
+              counts[j],
+
+              sums[j][1] /
+              counts[j],
+
+              sums[j][2] /
+              counts[j]
+
             ];
-          } else {
-            topColours[j] = [...random(sampleArray)]; // reseed empty cluster
+
           }
+
+          else {
+
+            topColours[j] =
+              [
+                ...random(
+                  sampleArray
+                )
+              ];
+
+          }
+
         }
+
       }
-      return topColours.map(c => [Math.round(c[0]), Math.round(c[1]), Math.round(c[2])]);
+
+
+      return topColours.map(
+        colour => [
+
+          Math.round(colour[0]),
+          Math.round(colour[1]),
+          Math.round(colour[2])
+
+        ]
+      );
+
     }
 
-    function distance(a, b){
-      let dr = a[0] - b[0];
-      let dg = a[1] - b[1];
-      let db = a[2] - b[2];
-      return dr * dr + dg * dg + db * db;
+
+    function distance(a, b) {
+
+      let dr =
+        a[0] - b[0];
+
+      let dg =
+        a[1] - b[1];
+
+      let db =
+        a[2] - b[2];
+
+
+      /*
+       * Squared Euclidean distance.
+       * Square root is unnecessary when
+       * only comparing distances.
+       */
+
+      return (
+        dr * dr +
+        dg * dg +
+        db * db
+      );
+
     }
+
 
     function coloursEqual(a, b) {
-      return a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
+
+      return (
+        a[0] === b[0] &&
+        a[1] === b[1] &&
+        a[2] === b[2]
+      );
+
     }
 
-    function containsColour(list, colour) {
-      return list.some(c => coloursEqual(c, colour));
+
+    function containsColour(
+      list,
+      colour
+    ) {
+
+      return list.some(
+        currentColour =>
+          coloursEqual(
+            currentColour,
+            colour
+          )
+      );
+
     }
 
-    function showPalette(cols, x, y, w, h){
-      if (!cols || !cols.length) return;
 
-      const sorted = [...cols].sort((a, b) => luminanceRGB(b) - luminanceRGB(a));
+    function showPalette(
+      cols,
+      x,
+      y,
+      w,
+      h
+    ) {
+
+      if (
+        !cols ||
+        !cols.length
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+       * Sort colours by perceived
+       * luminance.
+       */
+
+      const sorted =
+        [...cols].sort(
+          (a, b) =>
+            luminanceRGB(b) -
+            luminanceRGB(a)
+        );
+
+
       noStroke();
 
-      // soft gradients between swatches
-      for (let c = 0; c < sorted.length - 1; c++){
-        for (let p = 0; p < 1; p += 0.01){
-          const c1 = color(sorted[c][0], sorted[c][1], sorted[c][2]);
-          const c2 = color(sorted[c+1][0], sorted[c+1][1], sorted[c+1][2]);
-          const mid = lerpColor(c1, c2, p);
+
+      /*
+       * Draw smooth gradients between
+       * neighbouring colours.
+       */
+
+      for (
+        let c = 0;
+        c < sorted.length - 1;
+        c++
+      ) {
+
+        for (
+          let p = 0;
+          p < 1;
+          p += 0.01
+        ) {
+
+          const c1 =
+            color(
+              sorted[c][0],
+              sorted[c][1],
+              sorted[c][2]
+            );
+
+
+          const c2 =
+            color(
+              sorted[c + 1][0],
+              sorted[c + 1][1],
+              sorted[c + 1][2]
+            );
+
+
+          const mid =
+            lerpColor(
+              c1,
+              c2,
+              p
+            );
+
+
           fill(mid);
-          rect(x, y + (h/(sorted.length-1)) * (c + p), w, h/(sorted.length-1));
+
+
+          rect(
+
+            x,
+
+            y +
+            (
+              h /
+              (sorted.length - 1)
+            ) *
+            (c + p),
+
+            w,
+
+            h /
+            (sorted.length - 1)
+
+          );
+
         }
+
       }
 
-      // solid swatches
-      const cellH = h / sorted.length;
-      for (let i = 0; i < sorted.length; i++){
-        fill(sorted[i][0], sorted[i][1], sorted[i][2]);
-        rect(x, y + i * cellH, w, cellH + 1);
+
+      /*
+       * Draw solid palette swatches.
+       */
+
+      const cellH =
+        h / sorted.length;
+
+
+      for (
+        let i = 0;
+        i < sorted.length;
+        i++
+      ) {
+
+        fill(
+          sorted[i][0],
+          sorted[i][1],
+          sorted[i][2]
+        );
+
+
+        rect(
+          x,
+          y + i * cellH,
+          w,
+          cellH + 1
+        );
+
       }
+
     }
+
 
     function luminanceRGB(c) {
-      return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+
+      return (
+        0.2126 * c[0] +
+        0.7152 * c[1] +
+        0.0722 * c[2]
+      );
+
     }
+
+
+    /*
+     * Automatically update footer year.
+     */
+
+    document.getElementById(
+      'y'
+    ).textContent =
+      new Date().getFullYear();
+
   </script>
+
 </body>
+
 </html>
