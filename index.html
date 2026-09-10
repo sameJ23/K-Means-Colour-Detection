@@ -181,14 +181,18 @@
       border: 1px solid var(--border);
       border-radius: 16px;
       padding: 12px;
+    }
 
-      height: fit-content;
+    #imageCard {
       align-self: start;
+      height: auto;
+      min-height: 0;
     }
 
     #canvasWrap {
       width: 100%;
       height: auto;
+      min-height: 0;
       display: block;
       background: #0a0f1c;
       border: 1px solid rgba(148, 163, 184, 0.14);
@@ -199,9 +203,9 @@
 
     canvas.p5Canvas {
       display: block;
-      width: 100%;
-      height: auto;
-      border-radius: 12px;
+      margin: 0;
+      padding: 0;
+      max-width: 100%;
     }
 
     #controls {
@@ -215,9 +219,12 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 10px;
+
       background: #0d1424;
+
       border: 1px solid rgba(148, 163, 184, 0.16);
       border-radius: 12px;
+
       padding: 12px;
     }
 
@@ -231,7 +238,9 @@
       width: 220px;
       height: 4px;
       appearance: none;
+
       background: rgba(148, 163, 184, 0.25);
+
       border-radius: 999px;
       outline: none;
     }
@@ -239,31 +248,43 @@
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
+
       width: 16px;
       height: 16px;
+
       background: var(--accent);
+
       border: 2px solid #000;
       border-radius: 50%;
+
       box-shadow: 0 0 0 3px var(--ring);
+
       cursor: pointer;
     }
 
     input[type="file"] {
       max-width: 100%;
+
       background: #0d1424;
       color: var(--text);
+
       border: 1px solid rgba(148, 163, 184, 0.25);
       border-radius: 10px;
+
       padding: 8px 10px;
+
       font-size: 14px;
     }
 
     input[type="file"]::-webkit-file-upload-button {
       background: #0d1424;
       color: var(--text);
+
       border: 1px solid rgba(148, 163, 184, 0.25);
       border-radius: 8px;
+
       padding: 6px 8px;
+
       cursor: pointer;
     }
 
@@ -298,11 +319,13 @@
     <header>
 
       <div>
+
         <h1>James Novosel</h1>
 
         <p class="sub">
           Computing Science student at UTS • Software Development • Sydney, Australia
         </p>
+
       </div>
 
       <nav>
@@ -392,7 +415,7 @@
 
       <div class="demo-grid">
 
-        <div class="card">
+        <div class="card" id="imageCard">
           <div id="canvasWrap"></div>
         </div>
 
@@ -446,69 +469,76 @@
       noStroke();
 
       const controlsHost = select('#controls');
-      const canvasHost = select('#canvasWrap');
+      const canvasHost = document.getElementById('canvasWrap');
 
-      const totalW = canvasHost.elt.clientWidth || 960;
-
-      const stripW = clamp(
-        Math.round(totalW * 0.18),
-        120,
-        260
+      const totalW = Math.floor(
+        canvasHost.clientWidth
       );
 
-      const imgTargetW = Math.max(
-        1,
-        totalW - stripW
-      );
+      const dimensions =
+        getCanvasDimensions(
+          totalW
+        );
 
-      const scale = imgTargetW / img.width;
-
-      const imgH = Math.round(
-        img.height * scale
-      );
-
-      const cnv = createCanvas(
-        totalW,
-        imgH
-      );
+      const cnv =
+        createCanvas(
+          dimensions.width,
+          dimensions.height
+        );
 
       cnv.parent('canvasWrap');
-      cnv.addClass('p5Canvas');
 
-
-      const row = (labelText, elt) => {
-
-        const wrap = createDiv()
-          .parent(controlsHost);
-
-        wrap.addClass('control');
-
-        const lab = createElement(
-          'label',
-          labelText
-        ).parent(wrap);
-
-        lab.style(
-          'min-width',
-          '120px'
-        );
-
-        lab.style(
-          'color',
-          'var(--muted)'
-        );
-
-        elt.parent(wrap);
-
-      };
-
-
-      kSlider = createSlider(
-        2,
-        12,
-        k,
-        1
+      cnv.addClass(
+        'p5Canvas'
       );
+
+
+      const row =
+        (labelText, elt) => {
+
+          const wrap =
+            createDiv()
+              .parent(
+                controlsHost
+              );
+
+          wrap.addClass(
+            'control'
+          );
+
+          const lab =
+            createElement(
+              'label',
+              labelText
+            )
+            .parent(
+              wrap
+            );
+
+          lab.style(
+            'min-width',
+            '120px'
+          );
+
+          lab.style(
+            'color',
+            'var(--muted)'
+          );
+
+          elt.parent(
+            wrap
+          );
+
+        };
+
+
+      kSlider =
+        createSlider(
+          2,
+          12,
+          k,
+          1
+        );
 
       kSlider.input(
         scheduleRecompute
@@ -520,12 +550,13 @@
       );
 
 
-      iterSlider = createSlider(
-        1,
-        1000,
-        ITER,
-        1
-      );
+      iterSlider =
+        createSlider(
+          1,
+          1000,
+          ITER,
+          1
+        );
 
       iterSlider.input(
         scheduleRecompute
@@ -537,12 +568,13 @@
       );
 
 
-      stepSlider = createSlider(
-        1,
-        20,
-        STEP,
-        1
-      );
+      stepSlider =
+        createSlider(
+          1,
+          20,
+          STEP,
+          1
+        );
 
       stepSlider.input(
         scheduleRecompute
@@ -554,9 +586,10 @@
       );
 
 
-      fileInput = createFileInput(
-        handleFileUpload
-      );
+      fileInput =
+        createFileInput(
+          handleFileUpload
+        );
 
       row(
         'Image',
@@ -564,9 +597,10 @@
       );
 
 
-      folderInput = createElement(
-        'input'
-      )
+      folderInput =
+        createElement(
+          'input'
+        )
         .attribute(
           'type',
           'file'
@@ -597,9 +631,84 @@
     }
 
 
+    function getCanvasDimensions(
+      availableWidth
+    ) {
+
+      const stripW =
+        clamp(
+          Math.round(
+            availableWidth * 0.18
+          ),
+          120,
+          260
+        );
+
+      const imageWidth =
+        Math.max(
+          1,
+          availableWidth - stripW
+        );
+
+      const scale =
+        imageWidth /
+        img.width;
+
+      const imageHeight =
+        Math.round(
+          img.height *
+          scale
+        );
+
+      return {
+        width:
+          availableWidth,
+
+        height:
+          imageHeight,
+
+        imageWidth:
+          imageWidth,
+
+        paletteWidth:
+          stripW
+      };
+
+    }
+
+
     function windowResized() {
 
-      fitCanvasToHost();
+      resizeDemo();
+
+    }
+
+
+    function resizeDemo() {
+
+      if (!img) {
+        return;
+      }
+
+      const canvasHost =
+        document.getElementById(
+          'canvasWrap'
+        );
+
+      const totalW =
+        Math.floor(
+          canvasHost.clientWidth
+        );
+
+      const dimensions =
+        getCanvasDimensions(
+          totalW
+        );
+
+      resizeCanvas(
+        dimensions.width,
+        dimensions.height
+      );
 
       redraw();
 
@@ -608,11 +717,19 @@
 
     function scheduleRecompute() {
 
-      k = kSlider.value();
-      ITER = iterSlider.value();
-      STEP = stepSlider.value();
+      k =
+        kSlider.value();
 
-      if (recomputeTimer) {
+      ITER =
+        iterSlider.value();
+
+      STEP =
+        stepSlider.value();
+
+
+      if (
+        recomputeTimer
+      ) {
 
         clearTimeout(
           recomputeTimer
@@ -620,47 +737,12 @@
 
       }
 
-      recomputeTimer = setTimeout(
-        recompute,
-        120
-      );
 
-    }
-
-
-    function fitCanvasToHost() {
-
-      const host = document.getElementById(
-        'canvasWrap'
-      );
-
-      const totalW = host.clientWidth || 960;
-
-      if (!img) {
-        return;
-      }
-
-      const stripW = clamp(
-        Math.round(totalW * 0.18),
-        120,
-        260
-      );
-
-      const imgTargetW = Math.max(
-        1,
-        totalW - stripW
-      );
-
-      const scale = imgTargetW / img.width;
-
-      const imgH = Math.round(
-        img.height * scale
-      );
-
-      resizeCanvas(
-        totalW,
-        imgH
-      );
+      recomputeTimer =
+        setTimeout(
+          recompute,
+          120
+        );
 
     }
 
@@ -688,39 +770,31 @@
         return;
       }
 
-      const totalW = width;
 
-      const stripW = clamp(
-        Math.round(totalW * 0.18),
-        120,
-        260
-      );
+      clear();
 
-      const imgW =
-        totalW - stripW;
 
-      const scale =
-        imgW / img.width;
-
-      const imgH =
-        Math.round(
-          img.height * scale
+      const dimensions =
+        getCanvasDimensions(
+          width
         );
+
 
       image(
         img,
         0,
         0,
-        imgW,
-        imgH
+        dimensions.imageWidth,
+        dimensions.height
       );
+
 
       showPalette(
         centroids,
-        imgW,
+        dimensions.imageWidth,
         0,
-        stripW,
-        imgH
+        dimensions.paletteWidth,
+        dimensions.height
       );
 
     }
@@ -732,21 +806,25 @@
         return;
       }
 
-      sampleArray.length = 0;
+
+      sampleArray.length =
+        0;
+
 
       sample(
         img,
         STEP
       );
 
-      centroids = kmeans(
-        ITER,
-        k
-      );
 
-      fitCanvasToHost();
+      centroids =
+        kmeans(
+          ITER,
+          k
+        );
 
-      redraw();
+
+      resizeDemo();
 
     }
 
@@ -758,7 +836,9 @@
       if (
         file &&
         file.type &&
-        file.type.startsWith('image')
+        file.type.startsWith(
+          'image'
+        )
       ) {
 
         loadImage(
@@ -767,7 +847,8 @@
 
           function(loaded) {
 
-            img = loaded;
+            img =
+              loaded;
 
             recompute();
 
@@ -791,23 +872,32 @@
 
     function handleFolderUpload() {
 
-      const files = Array.from(
-        this.elt.files
-      ).filter(
-        file =>
-          file.type.startsWith(
-            'image/'
-          )
-      );
+      const files =
+        Array.from(
+          this.elt.files
+        )
+        .filter(
+          file =>
+            file.type.startsWith(
+              'image/'
+            )
+        );
 
-      if (!files.length) {
+
+      if (
+        !files.length
+      ) {
+
         return;
+
       }
+
 
       const url =
         URL.createObjectURL(
           files[0]
         );
+
 
       loadImage(
 
@@ -815,7 +905,8 @@
 
         function(loaded) {
 
-          img = loaded;
+          img =
+            loaded;
 
           recompute();
 
@@ -846,6 +937,7 @@
 
       img.loadPixels();
 
+
       for (
         let y = 0;
         y < img.height;
@@ -865,6 +957,7 @@
               x
             ) * 4;
 
+
           const r =
             img.pixels[index];
 
@@ -873,6 +966,7 @@
 
           const b =
             img.pixels[index + 2];
+
 
           sampleArray.push(
             [
@@ -894,7 +988,9 @@
       clusterCount
     ) {
 
-      let topColours = [];
+      let topColours =
+        [];
+
 
       for (
         let i = 0;
@@ -906,6 +1002,7 @@
           random(
             sampleArray
           );
+
 
         while (
           containsColour(
@@ -920,6 +1017,7 @@
             );
 
         }
+
 
         topColours.push(
           [
@@ -936,7 +1034,9 @@
         iteration++
       ) {
 
-        const closest = [];
+        const closest =
+          [];
+
 
         for (
           let i = 0;
@@ -944,13 +1044,16 @@
           i++
         ) {
 
-          let bestPosition = 0;
+          let bestPosition =
+            0;
+
 
           let bestDistance =
             distance(
               sampleArray[i],
               topColours[0]
             );
+
 
           for (
             let c = 1;
@@ -963,6 +1066,7 @@
                 sampleArray[i],
                 topColours[c]
               );
+
 
             if (
               currentDistance <
@@ -978,6 +1082,7 @@
             }
 
           }
+
 
           closest.push(
             bestPosition
@@ -999,11 +1104,14 @@
             ]
           );
 
+
         const counts =
           new Array(
             clusterCount
           )
-          .fill(0);
+          .fill(
+            0
+          );
 
 
         for (
@@ -1015,6 +1123,7 @@
           const cluster =
             closest[i];
 
+
           sums[cluster][0] +=
             sampleArray[i][0];
 
@@ -1023,6 +1132,7 @@
 
           sums[cluster][2] +=
             sampleArray[i][2];
+
 
           counts[cluster]++;
 
@@ -1110,6 +1220,7 @@
         a[2] -
         b[2];
 
+
       return (
         dr * dr +
         dg * dg +
@@ -1161,8 +1272,11 @@
         !colours ||
         !colours.length
       ) {
+
         return;
+
       }
+
 
       const sorted =
         [
@@ -1174,7 +1288,9 @@
             luminanceRGB(a)
         );
 
+
       noStroke();
+
 
       for (
         let colourIndex = 0;
@@ -1196,12 +1312,14 @@
               sorted[colourIndex][2]
             );
 
+
           const colourTwo =
             color(
               sorted[colourIndex + 1][0],
               sorted[colourIndex + 1][1],
               sorted[colourIndex + 1][2]
             );
+
 
           const middleColour =
             lerpColor(
@@ -1210,9 +1328,11 @@
               amount
             );
 
+
           fill(
             middleColour
           );
+
 
           rect(
 
@@ -1262,6 +1382,7 @@
           sorted[i][1],
           sorted[i][2]
         );
+
 
         rect(
           x,
